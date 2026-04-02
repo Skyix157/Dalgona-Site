@@ -1,0 +1,567 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Dalgona Challenge</title>
+  <style>
+    :root {
+      --bg: #120b05;
+      --card: rgba(38, 22, 10, 0.9);
+      --gold: #f5c15c;
+      --gold-2: #ffdf9a;
+      --text: #fff6df;
+      --muted: #d7c3a0;
+      --line: rgba(245, 193, 92, 0.25);
+      --accent: #ff6b81;
+    }
+    * { box-sizing: border-box; }
+    html { scroll-behavior: smooth; }
+    body {
+      margin: 0;
+      font-family: Arial, Helvetica, sans-serif;
+      background:
+        radial-gradient(circle at top, rgba(245,193,92,0.14), transparent 30%),
+        linear-gradient(180deg, #1a1008 0%, #0d0704 100%);
+      color: var(--text);
+    }
+    .wrap {
+      width: min(100%, 900px);
+      margin: 0 auto;
+      padding: 20px 16px 60px;
+    }
+    .hero {
+      min-height: 100svh;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      text-align: center;
+      position: relative;
+      overflow: hidden;
+    }
+    .hero-card, .card {
+      background: var(--card);
+      border: 1px solid var(--line);
+      border-radius: 24px;
+      box-shadow: 0 12px 40px rgba(0,0,0,0.28);
+      backdrop-filter: blur(6px);
+    }
+    .hero-card {
+      width: min(100%, 680px);
+      padding: 42px 22px;
+    }
+    .badge {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      width: 70px;
+      height: 70px;
+      border-radius: 999px;
+      border: 2px solid var(--gold);
+      color: var(--gold);
+      font-weight: 700;
+      margin-bottom: 18px;
+    }
+    h1 {
+      font-size: clamp(46px, 11vw, 92px);
+      line-height: 0.95;
+      margin: 0;
+      color: var(--gold-2);
+      letter-spacing: -1px;
+    }
+    .sub {
+      margin-top: 12px;
+      font-size: clamp(18px, 4vw, 26px);
+      color: var(--gold);
+      letter-spacing: 0.08em;
+    }
+    .hero p {
+      margin: 18px auto 0;
+      max-width: 500px;
+      color: var(--muted);
+      line-height: 1.6;
+      font-size: 15px;
+    }
+    .hero-actions {
+      display: flex;
+      gap: 12px;
+      flex-wrap: wrap;
+      justify-content: center;
+      margin-top: 26px;
+    }
+    .btn {
+      appearance: none;
+      border: none;
+      border-radius: 999px;
+      padding: 14px 18px;
+      font-weight: 700;
+      cursor: pointer;
+      text-decoration: none;
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      gap: 8px;
+      transition: transform 0.16s ease, opacity 0.16s ease;
+    }
+    .btn:hover { transform: translateY(-1px); }
+    .btn-primary {
+      background: var(--gold);
+      color: #221300;
+    }
+    .btn-secondary {
+      background: transparent;
+      color: var(--text);
+      border: 1px solid var(--line);
+    }
+    section {
+      padding-top: 28px;
+    }
+    .section-title {
+      font-size: 28px;
+      margin: 0 0 8px;
+      color: var(--gold-2);
+    }
+    .section-text {
+      color: var(--muted);
+      line-height: 1.6;
+      margin: 0 0 18px;
+    }
+    .grid {
+      display: grid;
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+      gap: 16px;
+    }
+    .card {
+      padding: 18px;
+    }
+    .steps {
+      display: grid;
+      gap: 12px;
+      padding: 0;
+      margin: 0;
+      list-style: none;
+    }
+    .step {
+      display: grid;
+      grid-template-columns: 34px 1fr;
+      gap: 12px;
+      align-items: start;
+      padding: 12px;
+      border-radius: 16px;
+      background: rgba(255,255,255,0.02);
+      border: 1px solid rgba(255,255,255,0.04);
+    }
+    .step-num {
+      width: 34px;
+      height: 34px;
+      border-radius: 999px;
+      border: 1px solid var(--gold);
+      display: grid;
+      place-items: center;
+      color: var(--gold);
+      font-weight: 700;
+    }
+    .youtube-box iframe {
+      width: 100%;
+      aspect-ratio: 16 / 9;
+      border: 0;
+      border-radius: 16px;
+    }
+    form {
+      display: grid;
+      gap: 12px;
+    }
+    label {
+      display: grid;
+      gap: 6px;
+      color: var(--muted);
+      font-size: 14px;
+    }
+    input, textarea {
+      width: 100%;
+      border-radius: 14px;
+      border: 1px solid var(--line);
+      background: rgba(255,255,255,0.03);
+      color: var(--text);
+      padding: 12px 14px;
+      font: inherit;
+    }
+    textarea {
+      min-height: 96px;
+      resize: vertical;
+    }
+    .helper {
+      font-size: 13px;
+      color: var(--muted);
+      line-height: 1.5;
+    }
+    .status {
+      min-height: 20px;
+      font-size: 14px;
+      color: var(--gold);
+    }
+    .gallery {
+      display: grid;
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+      gap: 14px;
+      margin-top: 16px;
+    }
+    .gallery-item {
+      overflow: hidden;
+      border-radius: 18px;
+      border: 1px solid var(--line);
+      background: rgba(255,255,255,0.03);
+    }
+    .gallery-item img {
+      width: 100%;
+      aspect-ratio: 4 / 3;
+      object-fit: cover;
+      display: block;
+      background: #24160d;
+    }
+    .gallery-item .meta {
+      padding: 12px;
+    }
+    .gallery-item h3 {
+      margin: 0 0 6px;
+      font-size: 16px;
+      color: var(--gold-2);
+    }
+    .gallery-item p {
+      margin: 0;
+      color: var(--muted);
+      font-size: 14px;
+      line-height: 1.5;
+      word-break: break-word;
+    }
+    .empty {
+      padding: 18px;
+      text-align: center;
+      color: var(--muted);
+      border: 1px dashed var(--line);
+      border-radius: 18px;
+      grid-column: 1 / -1;
+    }
+    .pill {
+      display: inline-block;
+      padding: 8px 12px;
+      border-radius: 999px;
+      background: rgba(255,255,255,0.05);
+      border: 1px solid var(--line);
+      color: var(--muted);
+      font-size: 13px;
+      margin-bottom: 10px;
+    }
+    footer {
+      margin-top: 30px;
+      color: var(--muted);
+      font-size: 13px;
+      text-align: center;
+      line-height: 1.6;
+    }
+    @media (max-width: 760px) {
+      .grid, .gallery { grid-template-columns: 1fr; }
+      .hero-card { padding: 34px 18px; }
+    }
+  </style>
+</head>
+<body>
+  <div class="wrap">
+    <section class="hero" id="top">
+      <div class="hero-card">
+        <div class="badge">456</div>
+        <h1>잘했어</h1>
+        <div class="sub">Good Job</div>
+        <p>
+          Welcome to the Dalgona Challenge gallery. Tap below to see how to play,
+          upload your photo, and view everyone’s dalgona creations.
+        </p>
+        <div class="hero-actions">
+          <a class="btn btn-primary" href="#tutorial">Go to Tutorial</a>
+          <a class="btn btn-secondary" href="#gallery">Open Gallery</a>
+        </div>
+      </div>
+    </section>
+
+    <section id="tutorial">
+      <span class="pill">How to play · 달고나 챌린지</span>
+      <h2 class="section-title">Tutorial</h2>
+      <p class="section-text">
+        Give each cookie an NFC sticker. When a guest taps the sticker, this page opens.
+        They can watch the tutorial first, then upload their dalgona photo and name.
+      </p>
+      <div class="grid">
+        <div class="card">
+          <ul class="steps">
+            <li class="step">
+              <div class="step-num">1</div>
+              <div>
+                <strong>Pick up your dalgona</strong><br />
+                Check the shape on the cookie.
+              </div>
+            </li>
+            <li class="step">
+              <div class="step-num">2</div>
+              <div>
+                <strong>Use the needle carefully</strong><br />
+                Trace around the shape slowly.
+              </div>
+            </li>
+            <li class="step">
+              <div class="step-num">3</div>
+              <div>
+                <strong>Do not crack it</strong><br />
+                Try to remove the shape cleanly.
+              </div>
+            </li>
+            <li class="step">
+              <div class="step-num">4</div>
+              <div>
+                <strong>Take a photo</strong><br />
+                Upload your result to the gallery below.
+              </div>
+            </li>
+          </ul>
+        </div>
+        <div class="card youtube-box">
+          <iframe
+            id="tutorialFrame"
+            src="https://www.youtube.com/embed/Qz_-RLFTVo8"
+            title="Dalgona tutorial"
+            allowfullscreen
+          ></iframe>
+          <p class="helper" style="margin-top: 12px;">
+            Change the video by editing the YouTube embed link in the HTML file.
+          </p>
+        </div>
+      </div>
+    </section>
+
+    <section id="gallery">
+      <span class="pill">Gallery · Shared photos</span>
+      <h2 class="section-title">Upload your dalgona</h2>
+      <p class="section-text">
+        This file supports two modes. If you leave Supabase off, uploads save only on the same device/browser.
+        If you add free Supabase keys, everyone can share the same gallery.
+      </p>
+      <div class="grid">
+        <div class="card">
+          <form id="uploadForm">
+            <label>
+              Name
+              <input id="name" type="text" maxlength="40" placeholder="e.g. Mina" required />
+            </label>
+            <label>
+              Caption (optional)
+              <textarea id="caption" maxlength="140" placeholder="I finished the star!"></textarea>
+            </label>
+            <label>
+              Photo
+              <input id="photo" type="file" accept="image/*" required />
+            </label>
+            <button class="btn btn-primary" type="submit">Upload photo</button>
+            <div class="status" id="status"></div>
+          </form>
+          <p class="helper">
+            Recommended: keep each image under about 4 MB so the page feels faster on phones.
+          </p>
+        </div>
+
+        <div class="card">
+          <strong>Setup mode</strong>
+          <p class="helper" id="modeText" style="margin-top:10px;">
+            Checking mode…
+          </p>
+          <p class="helper">
+            To use shared uploads, create a free Supabase project, a table called <code>entries</code>, and a public storage bucket called <code>dalgona</code>, then paste your project URL and anon key into this file.
+          </p>
+        </div>
+      </div>
+
+      <div class="gallery" id="galleryList"></div>
+    </section>
+
+    <footer>
+      Dalgona Challenge page for your Korean cultural festival.<br />
+      Hosted on GitHub Pages, optional shared gallery powered by Supabase.
+    </footer>
+  </div>
+
+  <script>
+    const CONFIG = {
+      // Optional shared gallery mode with Supabase.
+      // Leave these blank if you want simple device-only mode.
+      SUPABASE_URL: "",
+      SUPABASE_ANON_KEY: "",
+      SUPABASE_BUCKET: "dalgona",
+      TABLE_NAME: "entries",
+      LOCAL_STORAGE_KEY: "dalgona-gallery-local-v1"
+    };
+
+    const statusEl = document.getElementById('status');
+    const galleryListEl = document.getElementById('galleryList');
+    const modeTextEl = document.getElementById('modeText');
+    const formEl = document.getElementById('uploadForm');
+
+    function isSupabaseMode() {
+      return Boolean(CONFIG.SUPABASE_URL && CONFIG.SUPABASE_ANON_KEY);
+    }
+
+    function setStatus(text) {
+      statusEl.textContent = text || '';
+    }
+
+    function escapeHtml(str) {
+      return String(str)
+        .replace(/&/g, '&amp;')
+        .replace(/</g, '&lt;')
+        .replace(/>/g, '&gt;')
+        .replace(/"/g, '&quot;')
+        .replace(/'/g, '&#039;');
+    }
+
+    function getLocalEntries() {
+      try {
+        return JSON.parse(localStorage.getItem(CONFIG.LOCAL_STORAGE_KEY) || '[]');
+      } catch {
+        return [];
+      }
+    }
+
+    function saveLocalEntries(entries) {
+      localStorage.setItem(CONFIG.LOCAL_STORAGE_KEY, JSON.stringify(entries));
+    }
+
+    function renderEntries(entries) {
+      if (!entries || entries.length === 0) {
+        galleryListEl.innerHTML = '<div class="empty">No photos yet. Be the first to upload one.</div>';
+        return;
+      }
+
+      galleryListEl.innerHTML = entries.map(item => `
+        <article class="gallery-item">
+          <img src="${escapeHtml(item.image_url)}" alt="Dalgona uploaded by ${escapeHtml(item.name)}" />
+          <div class="meta">
+            <h3>${escapeHtml(item.name)}</h3>
+            <p>${escapeHtml(item.caption || 'Dalgona challenge entry')}</p>
+          </div>
+        </article>
+      `).join('');
+    }
+
+    async function loadSupabaseScript() {
+      if (window.supabase) return;
+      await new Promise((resolve, reject) => {
+        const s = document.createElement('script');
+        s.src = 'https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2';
+        s.onload = resolve;
+        s.onerror = reject;
+        document.head.appendChild(s);
+      });
+    }
+
+    async function loadEntries() {
+      if (!isSupabaseMode()) {
+        modeTextEl.textContent = 'Local mode: uploads save only on the same phone or browser. For a real shared gallery, add Supabase.';
+        const entries = getLocalEntries().reverse();
+        renderEntries(entries);
+        return;
+      }
+
+      modeTextEl.textContent = 'Shared mode: all festival guests can see the same gallery.';
+
+      try {
+        await loadSupabaseScript();
+        const client = window.supabase.createClient(CONFIG.SUPABASE_URL, CONFIG.SUPABASE_ANON_KEY);
+        const { data, error } = await client
+          .from(CONFIG.TABLE_NAME)
+          .select('name, caption, image_url, created_at')
+          .order('created_at', { ascending: false });
+
+        if (error) throw error;
+        renderEntries(data || []);
+      } catch (err) {
+        console.error(err);
+        renderEntries([]);
+        modeTextEl.textContent = 'Shared mode failed to load. Check your Supabase URL, anon key, table name, and bucket name.';
+      }
+    }
+
+    async function uploadLocal(file, name, caption) {
+      const reader = new FileReader();
+      const imageUrl = await new Promise((resolve, reject) => {
+        reader.onload = () => resolve(reader.result);
+        reader.onerror = reject;
+        reader.readAsDataURL(file);
+      });
+
+      const entries = getLocalEntries();
+      entries.push({
+        name,
+        caption,
+        image_url: imageUrl,
+        created_at: new Date().toISOString()
+      });
+      saveLocalEntries(entries);
+    }
+
+    async function uploadSupabase(file, name, caption) {
+      await loadSupabaseScript();
+      const client = window.supabase.createClient(CONFIG.SUPABASE_URL, CONFIG.SUPABASE_ANON_KEY);
+      const extension = (file.name.split('.').pop() || 'jpg').toLowerCase();
+      const fileName = `${Date.now()}-${Math.random().toString(36).slice(2)}.${extension}`;
+      const path = `uploads/${fileName}`;
+
+      const { error: uploadError } = await client.storage
+        .from(CONFIG.SUPABASE_BUCKET)
+        .upload(path, file, { upsert: false });
+
+      if (uploadError) throw uploadError;
+
+      const { data: publicData } = client.storage
+        .from(CONFIG.SUPABASE_BUCKET)
+        .getPublicUrl(path);
+
+      const { error: dbError } = await client
+        .from(CONFIG.TABLE_NAME)
+        .insert({
+          name,
+          caption,
+          image_url: publicData.publicUrl
+        });
+
+      if (dbError) throw dbError;
+    }
+
+    formEl.addEventListener('submit', async (event) => {
+      event.preventDefault();
+      const name = document.getElementById('name').value.trim();
+      const caption = document.getElementById('caption').value.trim();
+      const file = document.getElementById('photo').files[0];
+
+      if (!name || !file) {
+        setStatus('Please add your name and photo.');
+        return;
+      }
+
+      try {
+        setStatus('Uploading...');
+        if (isSupabaseMode()) {
+          await uploadSupabase(file, name, caption);
+        } else {
+          await uploadLocal(file, name, caption);
+        }
+
+        formEl.reset();
+        setStatus('Upload complete.');
+        await loadEntries();
+      } catch (err) {
+        console.error(err);
+        setStatus('Upload failed. Check your setup and try again.');
+      }
+    });
+
+    loadEntries();
+  </script>
+</body>
+</html>
