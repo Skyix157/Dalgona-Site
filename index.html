@@ -198,13 +198,62 @@
       font-size: 14px;
       color: var(--gold);
     }
-    .gallery {
-      display: grid;
-      grid-template-columns: repeat(2, minmax(0, 1fr));
-      gap: 14px;
+    .gallery-controls {
+      display: flex;
+      align-items: center;
+      gap: 12px;
       margin-top: 16px;
     }
+    .page-controls {
+      position: fixed;
+      top: 50%;
+      left: 0;
+      right: 0;
+      transform: translateY(-50%);
+      display: flex;
+      justify-content: space-between;
+      padding: 0 12px;
+      pointer-events: none;
+      z-index: 999;
+    }
+    .page-btn {
+      pointer-events: auto;
+      appearance: none;
+      border: none;
+      background: rgba(36, 27, 18, 0.75);
+      color: var(--text);
+      width: 44px;
+      height: 44px;
+      border-radius: 999px;
+      font-size: 24px;
+      cursor: pointer;
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      transition: transform 0.16s ease, opacity 0.16s ease;
+    }
+    .page-btn:hover {
+      transform: translateY(-1px);
+    }
+    .page-btn:disabled {
+      opacity: 0.35;
+      cursor: default;
+      transform: none;
+    }
+    .gallery {
+      display: flex;
+      gap: 14px;
+      overflow-x: auto;
+      scroll-behavior: smooth;
+      -webkit-overflow-scrolling: touch;
+      padding-bottom: 4px;
+    }
+    .gallery::-webkit-scrollbar {
+      display: none;
+    }
     .gallery-item {
+      flex: 0 0 min(280px, 100%);
+      min-width: 280px;
       overflow: hidden;
       border-radius: 18px;
       border: 1px solid var(--line);
@@ -232,13 +281,37 @@
       line-height: 1.5;
       word-break: break-word;
     }
+    .gallery-nav {
+      appearance: none;
+      border: none;
+      background: rgba(255,255,255,0.08);
+      color: var(--text);
+      width: 44px;
+      height: 44px;
+      border-radius: 999px;
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 24px;
+      cursor: pointer;
+      transition: background 0.16s ease, transform 0.16s ease;
+    }
+    .gallery-nav:hover {
+      background: rgba(255,255,255,0.14);
+      transform: translateY(-1px);
+    }
+    .gallery-nav:disabled {
+      opacity: 0.35;
+      cursor: default;
+      transform: none;
+    }
     .empty {
       padding: 18px;
       text-align: center;
       color: var(--muted);
       border: 1px dashed var(--line);
       border-radius: 18px;
-      grid-column: 1 / -1;
+      width: 100%;
     }
     .pill {
       display: inline-block;
@@ -258,7 +331,7 @@
       line-height: 1.6;
     }
     @media (max-width: 760px) {
-      .grid, .gallery { grid-template-columns: 1fr; }
+      .grid { grid-template-columns: 1fr; }
       .hero-card { padding: 34px 18px; }
     }
   </style>
@@ -376,13 +449,22 @@
         </div>
       </div>
 
-      <div class="gallery" id="galleryList"></div>
+      <div class="gallery-controls">
+        <button class="gallery-nav" id="galleryPrev" type="button" aria-label="Previous images">‹</button>
+        <div class="gallery" id="galleryList"></div>
+        <button class="gallery-nav" id="galleryNext" type="button" aria-label="Next images">›</button>
+      </div>
     </section>
 
     <footer>
       Dalgona Challenge page for your Korean cultural festival.<br />
       Hosted on GitHub Pages, optional shared gallery powered by Supabase.
     </footer>
+
+    <div class="page-controls" aria-label="Section navigation">
+      <button id="pagePrev" class="page-btn" type="button" aria-label="Previous section">←</button>
+      <button id="pageNext" class="page-btn" type="button" aria-label="Next section">→</button>
+    </div>
   </div>
 
   <script>
@@ -398,8 +480,69 @@
 
     const statusEl = document.getElementById('status');
     const galleryListEl = document.getElementById('galleryList');
+    const galleryPrevBtn = document.getElementById('galleryPrev');
+    const galleryNextBtn = document.getElementById('galleryNext');
     const modeTextEl = document.getElementById('modeText');
     const formEl = document.getElementById('uploadForm');
+
+    const pageSections = Array.from(document.querySelectorAll('section'));
+    const pagePrevBtn = document.getElementById('pagePrev');
+    const pageNextBtn = document.getElementById('pageNext');
+    let currentPageIndex = 0;
+
+    function goToPage(index) {
+      if (index < 0 || index >= pageSections.length) return;
+      currentPageIndex = index;
+      pageSections[currentPageIndex].scrollIntoView({ behavior: 'smooth', block: 'start' });
+      pagePrevBtn.disabled = currentPageIndex === 0;
+      pageNextBtn.disabled = currentPageIndex === pageSections.length - 1;
+    }
+
+    function updateSectionIndexOnScroll() {
+      const scrollPos = window.scrollY || window.pageYOffset;
+      let closest = 0;
+      let minDist = Infinity;
+      pageSections.forEach((section, idx) => {
+        const rect = section.getBoundingClientRect();
+        const dist = Math.abs(rect.top);
+        if (dist < minDist) {
+          minDist = dist;
+          closest = idx;
+        }
+      });
+      if (closest !== currentPageIndex) {
+        currentPageIndex = closest;
+        pagePrevBtn.disabled = currentPageIndex === 0;
+        pageNextBtn.disabled = currentPageIndex === pageSections.length - 1;
+      }
+    }
+
+    function scrollGallery(amount) {
+      if (!galleryListEl) return;
+      galleryListEl.scrollBy({ left: amount, behavior: 'smooth' });
+    }
+
+    function updateGalleryButtons() {
+      if (!galleryListEl || !galleryPrevBtn || !galleryNextBtn) return;
+      const maxScroll = galleryListEl.scrollWidth - galleryListEl.clientWidth;
+      galleryPrevBtn.disabled = galleryListEl.scrollLeft <= 0;
+      galleryNextBtn.disabled = galleryListEl.scrollLeft >= maxScroll - 1;
+    }
+
+    if (galleryPrevBtn && galleryNextBtn) {
+      galleryPrevBtn.addEventListener('click', () => scrollGallery(-galleryListEl.clientWidth * 0.85));
+      galleryNextBtn.addEventListener('click', () => scrollGallery(galleryListEl.clientWidth * 0.85));
+      galleryListEl.addEventListener('scroll', updateGalleryButtons);
+      window.addEventListener('resize', updateGalleryButtons);
+    }
+
+    if (pagePrevBtn && pageNextBtn) {
+      pagePrevBtn.addEventListener('click', () => goToPage(currentPageIndex - 1));
+      pageNextBtn.addEventListener('click', () => goToPage(currentPageIndex + 1));
+      window.addEventListener('scroll', updateSectionIndexOnScroll);
+      window.addEventListener('resize', updateSectionIndexOnScroll);
+      goToPage(0);
+    }
 
     function isSupabaseMode() {
       return Boolean(CONFIG.SUPABASE_URL && CONFIG.SUPABASE_ANON_KEY);
@@ -433,6 +576,7 @@
     function renderEntries(entries) {
       if (!entries || entries.length === 0) {
         galleryListEl.innerHTML = '<div class="empty">No photos yet. Be the first to upload one.</div>';
+        updateGalleryButtons();
         return;
       }
 
@@ -445,6 +589,7 @@
           </div>
         </article>
       `).join('');
+      updateGalleryButtons();
     }
 
     async function loadSupabaseScript() {
