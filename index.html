@@ -16,17 +16,32 @@
       --accent: #ff6b81;
     }
     * { box-sizing: border-box; }
-    html { scroll-behavior: smooth; }
+    html, body {
+      height: 100%;
+      overflow: hidden;
+    }
     body {
       margin: 0;
       font-family: Arial, Helvetica, sans-serif;
-      background: url('squid-bg.png') center/cover no-repeat;
+      background: url('squid-bg.png') center top / auto 100% no-repeat;
       color: var(--text);
     }
     .wrap {
       width: min(100%, 900px);
       margin: 0 auto;
       padding: 20px 16px 60px;
+      height: 100%;
+      overflow: hidden;
+      position: relative;
+    }
+    section {
+      display: none;
+      height: 100%;
+      overflow: auto;
+      padding-top: 28px;
+    }
+    section.active {
+      display: block;
     }
     .hero {
       min-height: 100svh;
@@ -496,29 +511,19 @@
 
     function goToPage(index) {
       if (index < 0 || index >= pageSections.length) return;
+      pageSections.forEach((section, idx) => {
+        section.classList.toggle('active', idx === index);
+        if (idx === index) {
+          section.scrollTop = 0;
+        }
+      });
       currentPageIndex = index;
-      pageSections[currentPageIndex].scrollIntoView({ behavior: 'smooth', block: 'start' });
       pagePrevBtn.disabled = currentPageIndex === 0;
       pageNextBtn.disabled = currentPageIndex === pageSections.length - 1;
     }
 
     function updateSectionIndexOnScroll() {
-      const scrollPos = window.scrollY || window.pageYOffset;
-      let closest = 0;
-      let minDist = Infinity;
-      pageSections.forEach((section, idx) => {
-        const rect = section.getBoundingClientRect();
-        const dist = Math.abs(rect.top);
-        if (dist < minDist) {
-          minDist = dist;
-          closest = idx;
-        }
-      });
-      if (closest !== currentPageIndex) {
-        currentPageIndex = closest;
-        pagePrevBtn.disabled = currentPageIndex === 0;
-        pageNextBtn.disabled = currentPageIndex === pageSections.length - 1;
-      }
+      // No global page scroll in section mode; this function remains for future sync hooks.
     }
 
     function scrollGallery(amount) {
@@ -543,8 +548,6 @@
     if (pagePrevBtn && pageNextBtn) {
       pagePrevBtn.addEventListener('click', () => goToPage(currentPageIndex - 1));
       pageNextBtn.addEventListener('click', () => goToPage(currentPageIndex + 1));
-      window.addEventListener('scroll', updateSectionIndexOnScroll);
-      window.addEventListener('resize', updateSectionIndexOnScroll);
       goToPage(0);
     }
 
