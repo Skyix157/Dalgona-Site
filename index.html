@@ -2,224 +2,91 @@
 <html lang="en">
 <head>
   <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>Dalgona Challenge</title>
   <style>
     :root {
-      --gold: #f6cf61;
-      --gold-2: #fff2be;
-      --text: #fffdf7;
-      --muted: #eef4ff;
-      --card: rgba(16, 23, 33, 0.52);
-      --line: rgba(255, 255, 255, 0.22);
-      --shadow: 0 20px 50px rgba(0,0,0,0.28);
+      --bg: #120b05;
+      --card: rgba(38, 22, 10, 0.9);
+      --gold: #f5c15c;
+      --gold-2: #ffdf9a;
+      --text: #fff6df;
+      --muted: #d7c3a0;
+      --line: rgba(245, 193, 92, 0.25);
+      --accent: #ff6b81;
     }
-
     * { box-sizing: border-box; }
-    html, body {
+    html { scroll-behavior: smooth; }
+    body {
       margin: 0;
-      width: 100%;
-      height: 100%;
-      overflow: hidden;
       font-family: Arial, Helvetica, sans-serif;
-      background: #8ec9f5;
+      background: url('squid-bg.png') center/cover no-repeat;
       color: var(--text);
     }
-
-    body::before {
-      content: "";
-      position: fixed;
-      inset: 0;
-      background-image:
-        linear-gradient(rgba(14, 30, 45, 0.10), rgba(14, 30, 45, 0.26)),
-        url('squid-bg.png');
-      background-size: cover;
-      background-position: center center;
-      z-index: -2;
+    .wrap {
+      width: min(100%, 900px);
+      margin: 0 auto;
+      padding: 20px 16px 60px;
     }
-
-    body::after {
-      content: "";
-      position: fixed;
-      inset: 0;
-      background: linear-gradient(to bottom, rgba(255,255,255,0.08), rgba(0,0,0,0.10));
-      z-index: -1;
-      pointer-events: none;
-    }
-
-    .slider {
-      width: 100%;
-      height: 100svh;
-      overflow: hidden;
-      position: relative;
-    }
-
-    .track {
-      display: flex;
-      width: 300%;
-      height: 100%;
-      transition: transform 0.45s ease;
-    }
-
-    .slide {
-      width: 100vw;
-      height: 100svh;
-      flex: 0 0 100vw;
-      padding: 18px 16px calc(20px + env(safe-area-inset-bottom));
+    .hero {
+      min-height: 100svh;
       display: flex;
       align-items: center;
       justify-content: center;
-      position: relative;
-    }
-
-    .panel {
-      width: min(100%, 460px);
-      max-height: calc(100svh - 36px - env(safe-area-inset-bottom));
-      overflow: auto;
-      background: var(--card);
-      backdrop-filter: blur(8px);
-      border: 1px solid var(--line);
-      border-radius: 26px;
-      box-shadow: var(--shadow);
-      padding: 22px 18px 18px;
-      scrollbar-width: none;
-    }
-    .panel::-webkit-scrollbar { display: none; }
-
-    .hero-panel {
       text-align: center;
-      padding-top: 30px;
-      padding-bottom: 24px;
+      position: relative;
+      overflow: hidden;
     }
-
+    .hero-card, .card {
+      background: var(--card);
+      border: 1px solid var(--line);
+      border-radius: 24px;
+      box-shadow: 0 12px 40px rgba(0,0,0,0.28);
+      backdrop-filter: blur(6px);
+    }
+    .hero-card {
+      width: min(100%, 680px);
+      padding: 42px 22px;
+    }
     .badge {
-      width: 72px;
-      height: 72px;
-      margin: 0 auto 16px;
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      width: 70px;
+      height: 70px;
       border-radius: 999px;
       border: 2px solid var(--gold);
-      display: grid;
-      place-items: center;
       color: var(--gold);
       font-weight: 700;
-      font-size: 20px;
-      background: rgba(255,255,255,0.08);
+      margin-bottom: 18px;
     }
-
     h1 {
+      font-size: clamp(46px, 11vw, 92px);
+      line-height: 0.95;
       margin: 0;
-      font-size: clamp(52px, 15vw, 96px);
-      line-height: 0.92;
       color: var(--gold-2);
-      text-shadow: 0 8px 20px rgba(0,0,0,0.18);
+      letter-spacing: -1px;
     }
-
     .sub {
-      margin-top: 10px;
-      font-size: clamp(18px, 5vw, 28px);
-      letter-spacing: 0.08em;
+      margin-top: 12px;
+      font-size: clamp(18px, 4vw, 26px);
       color: var(--gold);
-      font-weight: 700;
+      letter-spacing: 0.08em;
     }
-
-    .intro {
-      margin: 16px auto 0;
-      max-width: 320px;
+    .hero p {
+      margin: 18px auto 0;
+      max-width: 500px;
       color: var(--muted);
       line-height: 1.6;
       font-size: 15px;
     }
-
-    .pill {
-      display: inline-block;
-      padding: 7px 12px;
-      border-radius: 999px;
-      background: rgba(255,255,255,0.12);
-      border: 1px solid var(--line);
-      color: var(--gold-2);
-      font-size: 13px;
-      margin-bottom: 10px;
-    }
-
-    .section-title {
-      font-size: 28px;
-      margin: 0 0 8px;
-      color: var(--gold-2);
-    }
-
-    .section-text {
-      color: var(--muted);
-      line-height: 1.6;
-      margin: 0 0 16px;
-      font-size: 14px;
-    }
-
-    .steps {
-      display: grid;
-      gap: 10px;
-      padding: 0;
-      margin: 0 0 16px;
-      list-style: none;
-    }
-
-    .step {
-      display: grid;
-      grid-template-columns: 34px 1fr;
-      gap: 10px;
-      align-items: start;
-      padding: 12px;
-      border-radius: 16px;
-      background: rgba(255,255,255,0.10);
-      border: 1px solid rgba(255,255,255,0.14);
-    }
-
-    .step-num {
-      width: 34px;
-      height: 34px;
-      border-radius: 999px;
-      display: grid;
-      place-items: center;
-      color: #223;
-      background: var(--gold);
-      font-weight: 700;
-    }
-
-    .yt-box iframe {
-      width: 100%;
-      aspect-ratio: 16 / 9;
-      border: 0;
-      border-radius: 16px;
-      display: block;
-      margin-top: 12px;
-    }
-
-    form {
-      display: grid;
+    .hero-actions {
+      display: flex;
       gap: 12px;
-      margin-top: 12px;
+      flex-wrap: wrap;
+      justify-content: center;
+      margin-top: 26px;
     }
-
-    label {
-      display: grid;
-      gap: 6px;
-      color: var(--gold-2);
-      font-size: 14px;
-      font-weight: 700;
-    }
-
-    input, textarea {
-      width: 100%;
-      border-radius: 14px;
-      border: 1px solid var(--line);
-      background: rgba(255,255,255,0.10);
-      color: white;
-      padding: 12px 14px;
-      font: inherit;
-    }
-
-    input::placeholder, textarea::placeholder { color: rgba(255,255,255,0.75); }
-    textarea { min-height: 92px; resize: vertical; }
-
     .btn {
       appearance: none;
       border: none;
@@ -232,196 +99,251 @@
       align-items: center;
       justify-content: center;
       gap: 8px;
+      transition: transform 0.16s ease, opacity 0.16s ease;
     }
-
+    .btn:hover { transform: translateY(-1px); }
     .btn-primary {
       background: var(--gold);
-      color: #2a1a00;
+      color: #221300;
     }
-
     .btn-secondary {
-      background: rgba(255,255,255,0.12);
-      color: white;
+      background: transparent;
+      color: var(--text);
       border: 1px solid var(--line);
     }
-
-    .hero-actions {
-      display: flex;
-      gap: 10px;
-      justify-content: center;
-      flex-wrap: wrap;
-      margin-top: 22px;
+    section {
+      padding-top: 28px;
     }
-
-    .helper, .status, .mode {
-      font-size: 13px;
-      line-height: 1.55;
+    .section-title {
+      font-size: 28px;
+      margin: 0 0 8px;
+      color: var(--gold-2);
+    }
+    .section-text {
       color: var(--muted);
+      line-height: 1.6;
+      margin: 0 0 18px;
     }
-    .status { color: var(--gold-2); min-height: 20px; }
-    .mode {
-      margin-top: 14px;
+    .grid {
+      display: grid;
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+      gap: 16px;
+    }
+    .card {
+      padding: 18px;
+    }
+    .steps {
+      display: grid;
+      gap: 12px;
+      padding: 0;
+      margin: 0;
+      list-style: none;
+    }
+    .step {
+      display: grid;
+      grid-template-columns: 34px 1fr;
+      gap: 12px;
+      align-items: start;
       padding: 12px;
-      border-radius: 14px;
-      background: rgba(255,255,255,0.08);
-      border: 1px solid rgba(255,255,255,0.12);
+      border-radius: 16px;
+      background: rgba(255,255,255,0.02);
+      border: 1px solid rgba(255,255,255,0.04);
     }
-
+    .step-num {
+      width: 34px;
+      height: 34px;
+      border-radius: 999px;
+      border: 1px solid var(--gold);
+      display: grid;
+      place-items: center;
+      color: var(--gold);
+      font-weight: 700;
+    }
+    .youtube-box iframe {
+      width: 100%;
+      aspect-ratio: 16 / 9;
+      border: 0;
+      border-radius: 16px;
+    }
+    form {
+      display: grid;
+      gap: 12px;
+    }
+    label {
+      display: grid;
+      gap: 6px;
+      color: var(--muted);
+      font-size: 14px;
+    }
+    input, textarea {
+      width: 100%;
+      border-radius: 14px;
+      border: 1px solid var(--line);
+      background: rgba(255,255,255,0.03);
+      color: var(--text);
+      padding: 12px 14px;
+      font: inherit;
+    }
+    textarea {
+      min-height: 96px;
+      resize: vertical;
+    }
+    .helper {
+      font-size: 13px;
+      color: var(--muted);
+      line-height: 1.5;
+    }
+    .status {
+      min-height: 20px;
+      font-size: 14px;
+      color: var(--gold);
+    }
     .gallery {
       display: grid;
-      grid-template-columns: 1fr;
-      gap: 12px;
-      margin-top: 14px;
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+      gap: 14px;
+      margin-top: 16px;
     }
-
     .gallery-item {
       overflow: hidden;
       border-radius: 18px;
       border: 1px solid var(--line);
-      background: rgba(255,255,255,0.10);
+      background: rgba(255,255,255,0.03);
     }
-
     .gallery-item img {
       width: 100%;
       aspect-ratio: 4 / 3;
       object-fit: cover;
       display: block;
-      background: rgba(0,0,0,0.15);
+      background: #24160d;
     }
-
-    .meta { padding: 12px; }
-    .meta h3 {
+    .gallery-item .meta {
+      padding: 12px;
+    }
+    .gallery-item h3 {
       margin: 0 0 6px;
       font-size: 16px;
       color: var(--gold-2);
     }
-    .meta p {
+    .gallery-item p {
       margin: 0;
       color: var(--muted);
       font-size: 14px;
-      line-height: 1.55;
+      line-height: 1.5;
       word-break: break-word;
     }
-
     .empty {
       padding: 18px;
       text-align: center;
       color: var(--muted);
       border: 1px dashed var(--line);
       border-radius: 18px;
-      background: rgba(255,255,255,0.07);
+      grid-column: 1 / -1;
     }
-
-    .nav {
-      position: absolute;
-      left: 50%;
-      bottom: calc(14px + env(safe-area-inset-bottom));
-      transform: translateX(-50%);
-      z-index: 20;
-      display: flex;
-      align-items: center;
-      gap: 12px;
-      background: rgba(16, 23, 33, 0.38);
-      border: 1px solid rgba(255,255,255,0.16);
-      backdrop-filter: blur(8px);
-      padding: 8px 10px;
+    .pill {
+      display: inline-block;
+      padding: 8px 12px;
       border-radius: 999px;
+      background: rgba(255,255,255,0.05);
+      border: 1px solid var(--line);
+      color: var(--muted);
+      font-size: 13px;
+      margin-bottom: 10px;
     }
-
-    .arrow {
-      width: 44px;
-      height: 44px;
-      border-radius: 999px;
-      border: 1px solid rgba(255,255,255,0.18);
-      background: rgba(255,255,255,0.10);
-      color: white;
-      font-size: 22px;
-      cursor: pointer;
+    footer {
+      margin-top: 30px;
+      color: var(--muted);
+      font-size: 13px;
+      text-align: center;
+      line-height: 1.6;
     }
-
-    .arrow:disabled {
-      opacity: 0.35;
-      cursor: default;
-    }
-
-    .dots {
-      display: flex;
-      gap: 8px;
-      align-items: center;
-    }
-
-    .dot {
-      width: 8px;
-      height: 8px;
-      border-radius: 999px;
-      background: rgba(255,255,255,0.35);
-    }
-
-    .dot.active {
-      width: 22px;
-      background: var(--gold);
-    }
-
-    @media (min-width: 760px) {
-      .panel {
-        width: min(100%, 560px);
-        padding: 24px 22px 20px;
-      }
-      .gallery {
-        grid-template-columns: repeat(2, minmax(0, 1fr));
-      }
+    @media (max-width: 760px) {
+      .grid, .gallery { grid-template-columns: 1fr; }
+      .hero-card { padding: 34px 18px; }
     }
   </style>
 </head>
 <body>
-  <div class="slider">
-    <div class="track" id="track">
-      <section class="slide">
-        <div class="panel hero-panel">
-          <div class="badge">456</div>
-          <h1>잘했어</h1>
-          <div class="sub">Good Job</div>
-          <p class="intro">
-            Tap the arrows below to move page by page. Watch the tutorial,
-            upload your photo, and see everyone’s dalgona results.
-          </p>
-          <div class="hero-actions">
-            <button class="btn btn-primary" type="button" onclick="goToSlide(1)">Go to Tutorial</button>
-            <button class="btn btn-secondary" type="button" onclick="goToSlide(2)">Open Gallery</button>
-          </div>
+  <div class="wrap">
+    <section class="hero" id="top">
+      <div class="hero-card">
+        <div class="badge">456</div>
+        <h1>잘했어</h1>
+        <div class="sub">Good Job</div>
+        <p>
+          Welcome to the Dalgona Challenge gallery. Tap below to see how to play,
+          upload your photo, and view everyone’s dalgona creations.
+        </p>
+        <div class="hero-actions">
+          <a class="btn btn-primary" href="#tutorial">Go to Tutorial</a>
+          <a class="btn btn-secondary" href="#gallery">Open Gallery</a>
         </div>
-      </section>
+      </div>
+    </section>
 
-      <section class="slide">
-        <div class="panel">
-          <span class="pill">How to play · 달고나 챌린지</span>
-          <h2 class="section-title">Tutorial</h2>
-          <p class="section-text">
-            Give each cookie an NFC sticker. When a guest taps the sticker, this page opens.
-            They can watch the tutorial first, then upload their dalgona photo and name.
-          </p>
-
+    <section id="tutorial">
+      <span class="pill">How to play · 달고나 챌린지</span>
+      <h2 class="section-title">Tutorial</h2>
+      <p class="section-text">
+        Give each cookie an NFC sticker. When a guest taps the sticker, this page opens.
+        They can watch the tutorial first, then upload their dalgona photo and name.
+      </p>
+      <div class="grid">
+        <div class="card">
           <ul class="steps">
-            <li class="step"><div class="step-num">1</div><div><strong>Pick up your dalgona</strong><br />Check the shape on the cookie.</div></li>
-            <li class="step"><div class="step-num">2</div><div><strong>Use the needle carefully</strong><br />Trace around the shape slowly.</div></li>
-            <li class="step"><div class="step-num">3</div><div><strong>Do not crack it</strong><br />Try to remove the shape cleanly.</div></li>
-            <li class="step"><div class="step-num">4</div><div><strong>Take a photo</strong><br />Upload your result to the gallery.</div></li>
+            <li class="step">
+              <div class="step-num">1</div>
+              <div>
+                <strong>Pick up your dalgona</strong><br />
+                Check the shape on the cookie.
+              </div>
+            </li>
+            <li class="step">
+              <div class="step-num">2</div>
+              <div>
+                <strong>Use the needle carefully</strong><br />
+                Trace around the shape slowly.
+              </div>
+            </li>
+            <li class="step">
+              <div class="step-num">3</div>
+              <div>
+                <strong>Do not crack it</strong><br />
+                Try to remove the shape cleanly.
+              </div>
+            </li>
+            <li class="step">
+              <div class="step-num">4</div>
+              <div>
+                <strong>Take a photo</strong><br />
+                Upload your result to the gallery below.
+              </div>
+            </li>
           </ul>
-
-          <div class="yt-box">
-            <iframe src="https://www.youtube.com/embed/Qz_-RLFTVo8" title="Dalgona tutorial" allowfullscreen></iframe>
-          </div>
         </div>
-      </section>
-
-      <section class="slide">
-        <div class="panel">
-          <span class="pill">Gallery · Shared photos</span>
-          <h2 class="section-title">Upload your dalgona</h2>
-          <p class="section-text">
-            This page works best with Supabase so everyone can see the same shared gallery.
+        <div class="card youtube-box">
+          <iframe
+            id="tutorialFrame"
+            src="https://www.youtube.com/embed/-SneJ_7SRQk?si=xIw8gyTtYchoFe0a"
+            title="Dalgona tutorial"
+            allowfullscreen
+          ></iframe>
+          <p class="helper" style="margin-top: 12px;">
+            Change the video by editing the YouTube embed link in the HTML file.
           </p>
+        </div>
+      </div>
+    </section>
 
+    <section id="gallery">
+      <span class="pill">Gallery · Shared photos</span>
+      <h2 class="section-title">Upload your dalgona</h2>
+      <p class="section-text">
+        This file supports two modes. If you leave Supabase off, uploads save only on the same device/browser.
+        If you add free Supabase keys, everyone can share the same gallery.
+      </p>
+      <div class="grid">
+        <div class="card">
           <form id="uploadForm">
             <label>
               Name
@@ -438,30 +360,37 @@
             <button class="btn btn-primary" type="submit">Upload photo</button>
             <div class="status" id="status"></div>
           </form>
-
-          <div class="mode" id="modeText">Checking mode…</div>
-          <p class="helper">Recommended: keep each image under about 4 MB so the page feels faster on phones.</p>
-
-          <div class="gallery" id="galleryList"></div>
+          <p class="helper">
+            Recommended: keep each image under about 4 MB so the page feels faster on phones.
+          </p>
         </div>
-      </section>
-    </div>
 
-    <div class="nav">
-      <button class="arrow" id="prevBtn" type="button" aria-label="Previous page">←</button>
-      <div class="dots">
-        <div class="dot active"></div>
-        <div class="dot"></div>
-        <div class="dot"></div>
+        <div class="card">
+          <strong>Setup mode</strong>
+          <p class="helper" id="modeText" style="margin-top:10px;">
+            Checking mode…
+          </p>
+          <p class="helper">
+            To use shared uploads, create a free Supabase project, a table called <code>entries</code>, and a public storage bucket called <code>dalgona</code>, then paste your project URL and anon key into this file.
+          </p>
+        </div>
       </div>
-      <button class="arrow" id="nextBtn" type="button" aria-label="Next page">→</button>
-    </div>
+
+      <div class="gallery" id="galleryList"></div>
+    </section>
+
+    <footer>
+      Dalgona Challenge page for your Korean cultural festival.<br />
+      Hosted on GitHub Pages, optional shared gallery powered by Supabase.
+    </footer>
   </div>
 
   <script>
     const CONFIG = {
-      SUPABASE_URL: "",
-      SUPABASE_ANON_KEY: "",
+      // Optional shared gallery mode with Supabase.
+      // Leave these blank if you want simple device-only mode.
+      SUPABASE_URL: "https://htknswnjbqsxpmlswxyt.supabase.co",
+      SUPABASE_ANON_KEY: "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Imh0a25zd25qYnFzeHBtbHN3eHl0Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3NzUxMDQwMjAsImV4cCI6MjA5MDY4MDAyMH0.nMPvQ4E4LHCpk8LK8ApzIPuKuwuWgd_jcG27fpsK4pk",
       SUPABASE_BUCKET: "dalgona",
       TABLE_NAME: "entries",
       LOCAL_STORAGE_KEY: "dalgona-gallery-local-v1"
@@ -471,28 +400,6 @@
     const galleryListEl = document.getElementById('galleryList');
     const modeTextEl = document.getElementById('modeText');
     const formEl = document.getElementById('uploadForm');
-
-    const track = document.getElementById('track');
-    const dots = [...document.querySelectorAll('.dot')];
-    const prevBtn = document.getElementById('prevBtn');
-    const nextBtn = document.getElementById('nextBtn');
-    let currentSlide = 0;
-
-    function goToSlide(index) {
-      currentSlide = Math.max(0, Math.min(2, index));
-      track.style.transform = `translateX(-${currentSlide * 100}vw)`;
-      dots.forEach((dot, i) => dot.classList.toggle('active', i === currentSlide));
-      prevBtn.disabled = currentSlide === 0;
-      nextBtn.disabled = currentSlide === 2;
-    }
-
-    prevBtn.addEventListener('click', () => goToSlide(currentSlide - 1));
-    nextBtn.addEventListener('click', () => goToSlide(currentSlide + 1));
-    window.addEventListener('keydown', (e) => {
-      if (e.key === 'ArrowLeft') goToSlide(currentSlide - 1);
-      if (e.key === 'ArrowRight') goToSlide(currentSlide + 1);
-    });
-    goToSlide(0);
 
     function isSupabaseMode() {
       return Boolean(CONFIG.SUPABASE_URL && CONFIG.SUPABASE_ANON_KEY);
@@ -642,6 +549,7 @@
         } else {
           await uploadLocal(file, name, caption);
         }
+
         formEl.reset();
         setStatus('Upload complete.');
         await loadEntries();
