@@ -772,14 +772,6 @@
 
   <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
   <script>
-    const SUPABASE_URL = "https://htknswnjbqsxpmlswxyt.supabase.co";
-    const SUPABASE_ANON_KEY = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Imh0a25zd25qYnFzeHBtbHN3eHl0Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3NzUxMDQwMjAsImV4cCI6MjA5MDY4MDAyMH0.nMPvQ4E4LHCpk8LK8ApzIPuKuwuWgd_jcG27fpsK4pk";
-    const SUPABASE_BUCKET = "dalgona";
-
-    const supabase = window.supabase.createClient(
-      SUPABASE_URL,
-      SUPABASE_ANON_KEY
-    );
 
     let currentPage = "p1";
     let currentImg = null;
@@ -806,6 +798,15 @@
         loadGallery();
       }
     }
+
+        const SUPABASE_URL = "https://htknswnjbqsxpmlswxyt.supabase.co";
+    const SUPABASE_ANON_KEY = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Imh0a25zd25qYnFzeHBtbHN3eHl0Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3NzUxMDQwMjAsImV4cCI6MjA5MDY4MDAyMH0.nMPvQ4E4LHCpk8LK8ApzIPuKuwuWgd_jcG27fpsK4pk";
+    const SUPABASE_BUCKET = "dalgona";
+
+    const supabase = window.supabase.createClient(
+      SUPABASE_URL,
+      SUPABASE_ANON_KEY
+    );
 
     function showToast(msg) {
       const el = document.getElementById("toast");
