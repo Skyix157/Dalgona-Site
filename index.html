@@ -16,44 +16,20 @@
       --accent: #ff6b81;
     }
     * { box-sizing: border-box; }
-    html, body {
-      height: 100%;
-      overflow: hidden;
-    }
+    html { scroll-behavior: smooth; }
     body {
       margin: 0;
       font-family: Arial, Helvetica, sans-serif;
-      background: url('squid-bg.png') center center / contain no-repeat;
-      background-color: #120b05;
+      background: url('squid-bg.png') center/cover no-repeat;
       color: var(--text);
     }
     .wrap {
-      width: min(100%, 860px);
-      max-width: 860px;
+      width: min(100%, 900px);
       margin: 0 auto;
-      padding: 20px 16px 80px;
-      height: 100%;
-      overflow: hidden;
-      position: relative;
-      display: flex;
-      flex-direction: column;
-      justify-content: center;
-      align-items: center;
-    }
-    section {
-      display: none;
-      height: 100%;
-      overflow: auto;
-      padding-top: 28px;
-      width: 100%;
-      max-width: 860px;
-      padding-bottom: 80px;
-    }
-    section.active {
-      display: block;
+      padding: 20px 16px 60px;
     }
     .hero {
-      height: 100%;
+      min-height: 100svh;
       display: flex;
       align-items: center;
       justify-content: center;
@@ -70,8 +46,6 @@
     }
     .hero-card {
       width: min(100%, 680px);
-      max-width: 680px;
-      margin: 0 auto;
       padding: 42px 22px;
     }
     .badge {
@@ -229,46 +203,6 @@
       align-items: center;
       gap: 12px;
       margin-top: 16px;
-    }
-    .page-controls {
-      position: fixed;
-      left: 0;
-      right: 0;
-      bottom: 14px;
-      display: flex;
-      justify-content: space-between;
-      padding: 0 12px;
-      pointer-events: none;
-      z-index: 999;
-    }
-    @media (max-width: 760px) {
-      .page-controls {
-        bottom: 8px;
-      }
-    }
-    .page-btn {
-      pointer-events: auto;
-      appearance: none;
-      border: none;
-      background: rgba(36, 27, 18, 0.75);
-      color: var(--text);
-      width: 44px;
-      height: 44px;
-      border-radius: 999px;
-      font-size: 24px;
-      cursor: pointer;
-      display: inline-flex;
-      align-items: center;
-      justify-content: center;
-      transition: transform 0.16s ease, opacity 0.16s ease;
-    }
-    .page-btn:hover {
-      transform: translateY(-1px);
-    }
-    .page-btn:disabled {
-      opacity: 0.35;
-      cursor: default;
-      transform: none;
     }
     .gallery {
       display: flex;
@@ -491,10 +425,6 @@
       Hosted on GitHub Pages, optional shared gallery powered by Supabase.
     </footer>
 
-    <div class="page-controls" aria-label="Section navigation">
-      <button id="pagePrev" class="page-btn" type="button" aria-label="Previous section">←</button>
-      <button id="pageNext" class="page-btn" type="button" aria-label="Next section">→</button>
-    </div>
   </div>
 
   <script>
@@ -515,28 +445,6 @@
     const modeTextEl = document.getElementById('modeText');
     const formEl = document.getElementById('uploadForm');
 
-    const pageSections = Array.from(document.querySelectorAll('section'));
-    const pagePrevBtn = document.getElementById('pagePrev');
-    const pageNextBtn = document.getElementById('pageNext');
-    let currentPageIndex = 0;
-
-    function goToPage(index) {
-      if (index < 0 || index >= pageSections.length) return;
-      pageSections.forEach((section, idx) => {
-        section.classList.toggle('active', idx === index);
-        if (idx === index) {
-          section.scrollTop = 0;
-        }
-      });
-      currentPageIndex = index;
-      pagePrevBtn.disabled = currentPageIndex === 0;
-      pageNextBtn.disabled = currentPageIndex === pageSections.length - 1;
-    }
-
-    function updateSectionIndexOnScroll() {
-      // No global page scroll in section mode; this function remains for future sync hooks.
-    }
-
     function scrollGallery(amount) {
       if (!galleryListEl) return;
       galleryListEl.scrollBy({ left: amount, behavior: 'smooth' });
@@ -554,12 +462,6 @@
       galleryNextBtn.addEventListener('click', () => scrollGallery(galleryListEl.clientWidth * 0.85));
       galleryListEl.addEventListener('scroll', updateGalleryButtons);
       window.addEventListener('resize', updateGalleryButtons);
-    }
-
-    if (pagePrevBtn && pageNextBtn) {
-      pagePrevBtn.addEventListener('click', () => goToPage(currentPageIndex - 1));
-      pageNextBtn.addEventListener('click', () => goToPage(currentPageIndex + 1));
-      goToPage(0);
     }
 
     function isSupabaseMode() {
