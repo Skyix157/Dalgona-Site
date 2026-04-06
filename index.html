@@ -24,12 +24,34 @@ html,body{width:100%;height:100%;overflow:hidden;background:#0d0800;}
 .page.active{opacity:1;pointer-events:all;transform:translateX(0);}
 .page.exit-left{opacity:0;transform:translateX(-60px);}
 
-.bg{position:absolute;inset:0;z-index:0;background-size:cover;background-position:center top;}
-.bg-overlay{position:absolute;inset:0;z-index:1;}
+.bg{
+  position:absolute;
+  inset:0;
+  z-index:0;
+  background-size:cover;
+  background-position:center top;
+  pointer-events:none;
+}
+
+.bg-overlay{
+  position:absolute;
+  inset:0;
+  z-index:1;
+  pointer-events:none;
+}
 #p1 .bg-overlay,#p2 .bg-overlay,#p3 .bg-overlay,#p4 .bg-overlay{
   background:linear-gradient(180deg,rgba(255,253,245,.88) 0%,rgba(255,253,245,.93) 100%);
 }
-.page-inner{position:relative;z-index:2;width:100%;height:100%;display:flex;flex-direction:column;align-items:center;padding:1.8rem 1.5rem;}
+.page-inner{
+  position:relative;
+  z-index:5;
+  width:100%;
+  height:100%;
+  display:flex;
+  flex-direction:column;
+  align-items:center;
+  padding:1.8rem 1.5rem;
+}
 
 /* THICK SHAPES ROW */
 .shapes-row{display:flex;gap:.9rem;justify-content:center;margin-bottom:1rem;flex-shrink:0;align-items:center;}
@@ -53,6 +75,10 @@ html,body{width:100%;height:100%;overflow:hidden;background:#0d0800;}
 
 /* BUTTONS */
 .crayon-btn{
+  position:relative;
+  z-index:10;
+  touch-action:manipulation;
+
   font-family:'Teko',sans-serif;font-size:clamp(20px,6.5vw,30px);font-weight:700;
   color:var(--amber);background:transparent;
   border:3px solid var(--amber);border-radius:6px;
@@ -147,7 +173,7 @@ textarea.field-input{resize:none;height:56px;line-height:1.4;}
 
 /* BACK BTN */
 .back-btn{
-  position:absolute;top:1rem;left:1rem;z-index:10;
+  position:absolute;top:1rem;left:1rem;z-index:10;touch-action:manipulation;
   font-family:'Teko',sans-serif;font-size:17px;font-weight:700;
   color:var(--brown);background:rgba(255,253,245,.85);
   border:2px solid var(--brown);border-radius:20px;padding:.28rem .85rem;cursor:pointer;
@@ -333,6 +359,7 @@ const IMG="/9j/4AAQSkZJRgABAQAAAQABAAD/4gHYSUNDX1BST0ZJTEUAAQEAAAHIAAAAAAQwAABtb
 
 let cur='p1';
 function goPage(id){
+  console.log("clicked:", id);
   const c=document.getElementById(cur),n=document.getElementById(id);
   c.classList.add('exit-left');c.classList.remove('active');
   setTimeout(()=>c.classList.remove('exit-left'),450);
