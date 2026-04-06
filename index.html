@@ -2,629 +2,1039 @@
 <html lang="en">
 <head>
   <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <meta
+    name="viewport"
+    content="width=device-width,initial-scale=1.0,maximum-scale=1.0,user-scalable=no"
+  />
   <title>Dalgona Challenge</title>
+  <link
+    href="https://fonts.googleapis.com/css2?family=Teko:wght@400;500;600;700&family=Noto+Sans+KR:wght@400;700&display=swap"
+    rel="stylesheet"
+  />
   <style>
-    :root {
-      --bg: #120b05;
-      --card: rgba(38, 22, 10, 0.9);
-      --gold: #f5c15c;
-      --gold-2: #ffdf9a;
-      --text: #fff6df;
-      --muted: #d7c3a0;
-      --line: rgba(245, 193, 92, 0.25);
-      --accent: #ff6b81;
-    }
-    * { box-sizing: border-box; }
-    html { scroll-behavior: smooth; }
-    body {
+    * {
       margin: 0;
-      font-family: Arial, Helvetica, sans-serif;
-      background: url('squid-bg.png') center/cover no-repeat;
-      color: var(--text);
+      padding: 0;
+      box-sizing: border-box;
+      -webkit-tap-highlight-color: transparent;
     }
-    .wrap {
-      width: min(100%, 900px);
-      margin: 0 auto;
-      padding: 20px 16px 60px;
+
+    :root {
+      --gold: #f5c518;
+      --amber: #e8a500;
+      --brown: #5c3d0a;
+      --cream: #fffdf5;
+      --green: #2e7d32;
+      --red: #c62828;
+      --yellow: #f9a825;
+      --blue: #1565c0;
     }
-    .hero {
-      min-height: 100svh;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      text-align: center;
+
+    html,
+    body {
+      width: 100%;
+      height: 100%;
+      overflow: hidden;
+      background: #0d0800;
+    }
+
+    body {
+      font-family: "Noto Sans KR", sans-serif;
+    }
+
+    #app {
+      width: 100%;
+      height: 100svh;
       position: relative;
       overflow: hidden;
     }
-    .hero-card, .card {
-      background: var(--card);
-      border: 1px solid var(--line);
-      border-radius: 24px;
-      box-shadow: 0 12px 40px rgba(0,0,0,0.28);
-      backdrop-filter: blur(6px);
-    }
-    .hero-card {
-      width: min(100%, 680px);
-      padding: 42px 22px;
-    }
-    .badge {
-      display: inline-flex;
-      align-items: center;
-      justify-content: center;
-      width: 70px;
-      height: 70px;
-      border-radius: 999px;
-      border: 2px solid var(--gold);
-      color: var(--gold);
-      font-weight: 700;
-      margin-bottom: 18px;
-    }
-    h1 {
-      font-size: clamp(46px, 11vw, 92px);
-      line-height: 0.95;
-      margin: 0;
-      color: var(--gold-2);
-      letter-spacing: -1px;
-    }
-    .sub {
-      margin-top: 12px;
-      font-size: clamp(18px, 4vw, 26px);
-      color: var(--gold);
-      letter-spacing: 0.08em;
-    }
-    .hero p {
-      margin: 18px auto 0;
-      max-width: 500px;
-      color: var(--muted);
-      line-height: 1.6;
-      font-size: 15px;
-    }
-    .hero-actions {
+
+    .page {
+      position: absolute;
+      inset: 0;
       display: flex;
-      gap: 12px;
-      flex-wrap: wrap;
-      justify-content: center;
-      margin-top: 26px;
-    }
-    .btn {
-      appearance: none;
-      border: none;
-      border-radius: 999px;
-      padding: 14px 18px;
-      font-weight: 700;
-      cursor: pointer;
-      text-decoration: none;
-      display: inline-flex;
+      flex-direction: column;
       align-items: center;
-      justify-content: center;
-      gap: 8px;
-      transition: transform 0.16s ease, opacity 0.16s ease;
-    }
-    .btn:hover { transform: translateY(-1px); }
-    .btn-primary {
-      background: var(--gold);
-      color: #221300;
-    }
-    .btn-secondary {
-      background: transparent;
-      color: var(--text);
-      border: 1px solid var(--line);
-    }
-    section {
-      padding-top: 28px;
-    }
-    .section-title {
-      font-size: 28px;
-      margin: 0 0 8px;
-      color: var(--gold-2);
-    }
-    .section-text {
-      color: var(--muted);
-      line-height: 1.6;
-      margin: 0 0 18px;
-    }
-    .grid {
-      display: grid;
-      grid-template-columns: repeat(2, minmax(0, 1fr));
-      gap: 16px;
-    }
-    .card {
-      padding: 18px;
-    }
-    .steps {
-      display: grid;
-      gap: 12px;
-      padding: 0;
-      margin: 0;
-      list-style: none;
-    }
-    .step {
-      display: grid;
-      grid-template-columns: 34px 1fr;
-      gap: 12px;
-      align-items: start;
-      padding: 12px;
-      border-radius: 16px;
-      background: rgba(255,255,255,0.02);
-      border: 1px solid rgba(255,255,255,0.04);
-    }
-    .step-num {
-      width: 34px;
-      height: 34px;
-      border-radius: 999px;
-      border: 1px solid var(--gold);
-      display: grid;
-      place-items: center;
-      color: var(--gold);
-      font-weight: 700;
-    }
-    .youtube-box iframe {
-      width: 100%;
-      aspect-ratio: 16 / 9;
-      border: 0;
-      border-radius: 16px;
-    }
-    form {
-      display: grid;
-      gap: 12px;
-    }
-    label {
-      display: grid;
-      gap: 6px;
-      color: var(--muted);
-      font-size: 14px;
-    }
-    input, textarea {
-      width: 100%;
-      border-radius: 14px;
-      border: 1px solid var(--line);
-      background: rgba(255,255,255,0.03);
-      color: var(--text);
-      padding: 12px 14px;
-      font: inherit;
-    }
-    textarea {
-      min-height: 96px;
-      resize: vertical;
-    }
-    .helper {
-      font-size: 13px;
-      color: var(--muted);
-      line-height: 1.5;
-    }
-    .status {
-      min-height: 20px;
-      font-size: 14px;
-      color: var(--gold);
-    }
-    .gallery-controls {
-      display: flex;
-      align-items: center;
-      gap: 12px;
-      margin-top: 16px;
-    }
-    .gallery {
-      display: flex;
-      gap: 14px;
-      overflow-x: auto;
-      scroll-behavior: smooth;
-      -webkit-overflow-scrolling: touch;
-      padding-bottom: 4px;
-    }
-    .gallery::-webkit-scrollbar {
-      display: none;
-    }
-    .gallery-item {
-      flex: 0 0 min(280px, 100%);
-      min-width: 280px;
+      opacity: 0;
+      pointer-events: none;
+      transition: opacity 0.42s ease, transform 0.42s ease;
+      transform: translateX(60px);
       overflow: hidden;
-      border-radius: 18px;
-      border: 1px solid var(--line);
-      background: rgba(255,255,255,0.03);
     }
-    .gallery-item img {
+
+    .page.active {
+      opacity: 1;
+      pointer-events: all;
+      transform: translateX(0);
+    }
+
+    .page.exit-left {
+      opacity: 0;
+      transform: translateX(-60px);
+    }
+
+    .bg {
+      position: absolute;
+      inset: 0;
+      z-index: 0;
+      background-image: url("squid-bg.png");
+      background-size: cover;
+      background-position: center top;
+      background-repeat: no-repeat;
+    }
+
+    .bg-overlay {
+      position: absolute;
+      inset: 0;
+      z-index: 1;
+    }
+
+    #p1 .bg-overlay,
+    #p2 .bg-overlay,
+    #p3 .bg-overlay,
+    #p4 .bg-overlay {
+      background: linear-gradient(
+        180deg,
+        rgba(255, 253, 245, 0.8) 0%,
+        rgba(255, 253, 245, 0.9) 100%
+      );
+    }
+
+    .page-inner {
+      position: relative;
+      z-index: 2;
       width: 100%;
-      aspect-ratio: 4 / 3;
-      object-fit: cover;
-      display: block;
-      background: #24160d;
+      height: 100%;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      padding: 1.8rem 1.5rem;
     }
-    .gallery-item .meta {
-      padding: 12px;
+
+    .shapes-row {
+      display: flex;
+      gap: 0.9rem;
+      justify-content: center;
+      margin-bottom: 1rem;
+      flex-shrink: 0;
+      align-items: center;
     }
-    .gallery-item h3 {
-      margin: 0 0 6px;
-      font-size: 16px;
-      color: var(--gold-2);
+
+    .sh-svg {
+      width: clamp(38px, 10vw, 54px);
+      height: clamp(38px, 10vw, 54px);
     }
-    .gallery-item p {
-      margin: 0;
-      color: var(--muted);
-      font-size: 14px;
-      line-height: 1.5;
-      word-break: break-word;
+
+    #p1 .page-inner {
+      justify-content: center;
+      text-align: center;
+      gap: 0.5rem;
     }
-    .gallery-nav {
-      appearance: none;
-      border: none;
-      background: rgba(255,255,255,0.08);
-      color: var(--text);
-      width: 44px;
-      height: 44px;
-      border-radius: 999px;
-      display: inline-flex;
+
+    .welcome-title {
+      font-family: "Teko", sans-serif;
+      font-size: clamp(40px, 12vw, 64px);
+      color: var(--brown);
+      line-height: 1.05;
+      font-weight: 700;
+      margin-bottom: 0.3rem;
+    }
+
+    .welcome-divider {
+      width: 55%;
+      max-width: 240px;
+      height: 4px;
+      border-radius: 2px;
+      background: repeating-linear-gradient(
+        90deg,
+        var(--brown) 0,
+        var(--brown) 8px,
+        transparent 8px,
+        transparent 14px
+      );
+      margin: 0.5rem auto 0.4rem;
+      opacity: 0.5;
+    }
+
+    .crayon-btn {
+      font-family: "Teko", sans-serif;
+      font-size: clamp(20px, 6.5vw, 30px);
+      font-weight: 700;
+      color: var(--amber);
+      background: transparent;
+      border: 3px solid var(--amber);
+      border-radius: 6px;
+      padding: 0.55rem 2.5rem;
+      cursor: pointer;
+      letter-spacing: 2px;
+      box-shadow: 2px 2px 0 rgba(229, 165, 0, 0.25);
+      transition: background 0.2s, color 0.2s, transform 0.1s;
+      flex-shrink: 0;
+    }
+
+    .crayon-btn:active {
+      transform: scale(0.96);
+    }
+
+    .crayon-btn:hover {
+      background: rgba(245, 197, 24, 0.12);
+    }
+
+    .crayon-btn.filled {
+      background: var(--amber);
+      color: #fff;
+      border-color: var(--amber);
+    }
+
+    .crayon-btn.filled:hover {
+      background: var(--gold);
+      border-color: var(--gold);
+    }
+
+    .crayon-btn.ghost {
+      border-color: var(--brown);
+      color: var(--brown);
+      opacity: 0.55;
+      font-size: clamp(14px, 4.5vw, 19px);
+      padding: 0.4rem 1.5rem;
+    }
+
+    .crayon-btn.ghost:hover {
+      opacity: 0.85;
+    }
+
+    #p2 .page-inner,
+    #p4 .page-inner {
+      padding-top: 1.6rem;
+    }
+
+    .page-title {
+      font-family: "Teko", sans-serif;
+      font-size: clamp(20px, 6vw, 28px);
+      color: var(--brown);
+      font-weight: 700;
+      margin-bottom: 0.8rem;
+      text-align: center;
+      letter-spacing: 1px;
+    }
+
+    .steps-container {
+      width: 100%;
+      max-width: 360px;
+      display: flex;
+      flex-direction: column;
+      gap: 0.6rem;
+      margin-bottom: 0.9rem;
+    }
+
+    .step-row {
+      display: flex;
+      align-items: center;
+      gap: 0.8rem;
+      background: rgba(92, 61, 10, 0.07);
+      border-radius: 10px;
+      padding: 0.7rem 0.85rem;
+      border: 1.5px solid rgba(92, 61, 10, 0.14);
+    }
+
+    .step-num {
+      flex-shrink: 0;
+      width: 30px;
+      height: 30px;
+      border: 2.5px solid var(--brown);
+      border-radius: 50%;
+      display: flex;
       align-items: center;
       justify-content: center;
+      font-family: "Teko", sans-serif;
+      font-size: 16px;
+      font-weight: 700;
+      color: var(--brown);
+    }
+
+    .step-text {
+      font-family: "Teko", sans-serif;
+      font-size: clamp(15px, 4.5vw, 20px);
+      font-weight: 700;
+      color: var(--brown);
+    }
+
+    .btn-row {
+      display: flex;
+      flex-direction: column;
+      gap: 0.55rem;
+      width: 100%;
+      max-width: 320px;
+      align-items: center;
+    }
+
+    #p3 .page-inner {
+      padding-top: 2rem;
+    }
+
+    .upload-card {
+      width: 100%;
+      max-width: 340px;
+      border: 3px solid var(--brown);
+      border-radius: 12px;
+      padding: 1.1rem 1rem 1.3rem;
+      background: rgba(255, 253, 245, 0.92);
+      display: flex;
+      flex-direction: column;
+      gap: 0.65rem;
+    }
+
+    .field-label {
+      font-family: "Teko", sans-serif;
+      font-size: clamp(15px, 5vw, 19px);
+      font-weight: 700;
+      color: var(--brown);
+      margin-bottom: 0.15rem;
+      display: block;
+    }
+
+    .field-input {
+      width: 100%;
+      background: rgba(255, 255, 255, 0.85);
+      border: 1.5px solid rgba(92, 61, 10, 0.28);
+      color: var(--brown);
+      padding: 0.5rem 0.8rem;
+      font-family: "Teko", sans-serif;
+      font-size: 16px;
+      border-radius: 6px;
+      outline: none;
+      transition: border-color 0.2s;
+    }
+
+    .field-input:focus {
+      border-color: var(--amber);
+    }
+
+    textarea.field-input {
+      resize: none;
+      height: 56px;
+      line-height: 1.4;
+    }
+
+    .success-toggle {
+      display: flex;
+      gap: 0.5rem;
+    }
+
+    .stog-btn {
+      font-family: "Teko", sans-serif;
+      font-size: 15px;
+      font-weight: 700;
+      padding: 0.28rem 0.85rem;
+      border-radius: 20px;
+      border: 2px solid var(--brown);
+      color: var(--brown);
+      background: transparent;
+      cursor: pointer;
+      transition: all 0.2s;
+    }
+
+    .stog-btn.sel-yes {
+      background: var(--green);
+      color: #fff;
+      border-color: var(--green);
+    }
+
+    .stog-btn.sel-no {
+      background: var(--red);
+      color: #fff;
+      border-color: var(--red);
+    }
+
+    .star-row {
+      display: flex;
+      gap: 0.3rem;
+      margin-bottom: 0.2rem;
+    }
+
+    .star {
       font-size: 24px;
       cursor: pointer;
-      transition: background 0.16s ease, transform 0.16s ease;
+      filter: grayscale(1);
+      transition: filter 0.15s, transform 0.15s;
     }
-    .gallery-nav:hover {
-      background: rgba(255,255,255,0.14);
-      transform: translateY(-1px);
+
+    .star.lit {
+      filter: none;
     }
-    .gallery-nav:disabled {
-      opacity: 0.35;
-      cursor: default;
-      transform: none;
+
+    .star:hover {
+      transform: scale(1.2);
     }
-    .empty {
-      padding: 18px;
+
+    .photo-dz {
+      border: 2px dashed rgba(92, 61, 10, 0.32);
+      border-radius: 8px;
+      padding: 0.85rem;
       text-align: center;
-      color: var(--muted);
-      border: 1px dashed var(--line);
-      border-radius: 18px;
+      cursor: pointer;
+      position: relative;
+      transition: border-color 0.2s, background 0.2s;
+    }
+
+    .photo-dz:hover,
+    .photo-dz.over {
+      border-color: var(--amber);
+      background: rgba(245, 197, 24, 0.05);
+    }
+
+    .photo-dz input {
+      position: absolute;
+      inset: 0;
+      opacity: 0;
+      cursor: pointer;
       width: 100%;
+      height: 100%;
     }
-    .pill {
-      display: inline-block;
-      padding: 8px 12px;
-      border-radius: 999px;
-      background: rgba(255,255,255,0.05);
-      border: 1px solid var(--line);
-      color: var(--muted);
-      font-size: 13px;
-      margin-bottom: 10px;
+
+    .dz-placeholder {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 0.2rem;
     }
-    footer {
-      margin-top: 30px;
-      color: var(--muted);
+
+    .dz-icon {
+      font-size: 26px;
+    }
+
+    .dz-placeholder p {
+      font-family: "Teko", sans-serif;
       font-size: 13px;
+      color: rgba(92, 61, 10, 0.45);
+    }
+
+    .dz-preview {
+      max-height: 90px;
+      max-width: 100%;
+      border-radius: 4px;
+      display: block;
+      margin: 0 auto;
+    }
+
+    .gallery-title {
+      font-family: "Teko", sans-serif;
+      font-size: clamp(34px, 11vw, 54px);
+      font-weight: 700;
+      color: var(--brown);
+      margin-bottom: 0.7rem;
       text-align: center;
-      line-height: 1.6;
     }
-    @media (max-width: 760px) {
-      .grid { grid-template-columns: 1fr; }
-      .hero-card { padding: 34px 18px; }
+
+    .gallery-grid {
+      width: 100%;
+      max-width: 360px;
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 0.55rem;
+      overflow-y: auto;
+      flex: 1;
+      padding-bottom: 0.5rem;
+      scrollbar-width: none;
+    }
+
+    .gallery-grid::-webkit-scrollbar {
+      display: none;
+    }
+
+    .g-card {
+      border: 2.5px solid var(--brown);
+      border-radius: 8px;
+      overflow: hidden;
+      background: rgba(255, 253, 245, 0.9);
+      animation: card-pop 0.35s cubic-bezier(0.22, 1, 0.36, 1);
+    }
+
+    @keyframes card-pop {
+      from {
+        opacity: 0;
+        transform: scale(0.9);
+      }
+      to {
+        opacity: 1;
+        transform: scale(1);
+      }
+    }
+
+    .g-card img {
+      width: 100%;
+      aspect-ratio: 1;
+      object-fit: cover;
+      display: block;
+    }
+
+    .g-card-info {
+      padding: 0.3rem 0.4rem;
+    }
+
+    .g-card-name {
+      font-family: "Teko", sans-serif;
+      font-size: 13px;
+      font-weight: 700;
+      color: var(--brown);
+    }
+
+    .g-card-stars {
+      font-size: 10px;
+      line-height: 1.2;
+    }
+
+    .badge {
+      display: inline-block;
+      font-size: 8px;
+      font-family: "Teko", sans-serif;
+      padding: 0.05rem 0.3rem;
+      border-radius: 2px;
+      margin-left: 0.25rem;
+      vertical-align: middle;
+    }
+
+    .badge-win {
+      background: var(--green);
+      color: #fff;
+    }
+
+    .badge-fail {
+      background: var(--red);
+      color: #fff;
+    }
+
+    .g-review {
+      font-family: "Teko", sans-serif;
+      font-size: 10px;
+      color: rgba(92, 61, 10, 0.6);
+      margin-top: 0.1rem;
+    }
+
+    .empty-gallery {
+      grid-column: 1 / -1;
+      text-align: center;
+      padding: 2rem 0.5rem;
+      opacity: 0.35;
+    }
+
+    .empty-gallery .ei {
+      font-size: 38px;
+    }
+
+    .empty-gallery p {
+      font-family: "Teko", sans-serif;
+      font-size: 14px;
+      color: var(--brown);
+      margin-top: 0.35rem;
+    }
+
+    .back-btn {
+      position: absolute;
+      top: 1rem;
+      left: 1rem;
+      z-index: 10;
+      font-family: "Teko", sans-serif;
+      font-size: 17px;
+      font-weight: 700;
+      color: var(--brown);
+      background: rgba(255, 253, 245, 0.85);
+      border: 2px solid var(--brown);
+      border-radius: 20px;
+      padding: 0.28rem 0.85rem;
+      cursor: pointer;
+    }
+
+    #free-popup {
+      position: fixed;
+      inset: 0;
+      z-index: 900;
+      pointer-events: none;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+
+    .free-inner {
+      background: var(--cream);
+      border: 4px solid var(--amber);
+      border-radius: 16px;
+      padding: 2rem 2.5rem;
+      text-align: center;
+      box-shadow: 0 12px 40px rgba(0, 0, 0, 0.3);
+      opacity: 0;
+      transform: scale(0.85);
+      transition: opacity 0.4s ease, transform 0.4s ease;
+    }
+
+    #free-popup.show .free-inner {
+      opacity: 1;
+      transform: scale(1);
+    }
+
+    #free-popup.hide .free-inner {
+      opacity: 0;
+      transform: scale(0.85);
+    }
+
+    .free-emoji {
+      font-size: 52px;
+      margin-bottom: 0.5rem;
+    }
+
+    .free-text {
+      font-family: "Teko", sans-serif;
+      font-size: clamp(22px, 7vw, 32px);
+      font-weight: 700;
+      color: var(--brown);
+    }
+
+    .free-sub {
+      font-family: "Teko", sans-serif;
+      font-size: 15px;
+      color: var(--amber);
+      margin-top: 0.3rem;
+    }
+
+    .toast {
+      position: fixed;
+      bottom: 1.5rem;
+      left: 50%;
+      transform: translateX(-50%) translateY(120%);
+      background: var(--brown);
+      color: var(--cream);
+      padding: 0.5rem 1.3rem;
+      border-radius: 30px;
+      font-family: "Teko", sans-serif;
+      font-size: 15px;
+      font-weight: 700;
+      transition: transform 0.4s cubic-bezier(0.22, 1, 0.36, 1);
+      z-index: 800;
+      white-space: nowrap;
+    }
+
+    .toast.show {
+      transform: translateX(-50%) translateY(0);
+    }
+
+    #conf {
+      position: fixed;
+      inset: 0;
+      pointer-events: none;
+      z-index: 700;
     }
   </style>
 </head>
 <body>
-  <div class="wrap">
-    <section class="hero" id="top">
-      <div class="hero-card">
-        <div class="badge">456</div>
-        <h1>잘했어</h1>
-        <div class="sub">Good Job</div>
-        <p>
-          Welcome to the Dalgona Challenge gallery. Tap below to see how to play,
-          upload your photo, and view everyone’s dalgona creations.
-        </p>
-        <div class="hero-actions">
-          <a class="btn btn-primary" href="#tutorial">Go to Tutorial</a>
-          <a class="btn btn-secondary" href="#gallery">Open Gallery</a>
-        </div>
-      </div>
-    </section>
+  <canvas id="conf"></canvas>
+  <div class="toast" id="toast"></div>
 
-    <section id="tutorial">
-      <span class="pill">How to play · 달고나 챌린지</span>
-      <h2 class="section-title">Tutorial</h2>
-      <p class="section-text">
-        Give each cookie an NFC sticker. When a guest taps the sticker, this page opens.
-        They can watch the tutorial first, then upload their dalgona photo and name.
-      </p>
-      <div class="grid">
-        <div class="card">
-          <ul class="steps">
-            <li class="step">
-              <div class="step-num">1</div>
-              <div>
-                <strong>Pick up your dalgona</strong><br />
-                Check the shape on the cookie.
-              </div>
-            </li>
-            <li class="step">
-              <div class="step-num">2</div>
-              <div>
-                <strong>Use the needle carefully</strong><br />
-                Trace around the shape slowly.
-              </div>
-            </li>
-            <li class="step">
-              <div class="step-num">3</div>
-              <div>
-                <strong>Do not crack it</strong><br />
-                Try to remove the shape cleanly.
-              </div>
-            </li>
-            <li class="step">
-              <div class="step-num">4</div>
-              <div>
-                <strong>Take a photo</strong><br />
-                Upload your result to the gallery below.
-              </div>
-            </li>
-          </ul>
-        </div>
-        <div class="card youtube-box">
-          <iframe
-            id="tutorialFrame"
-            src="https://www.youtube.com/embed/-SneJ_7SRQk?si=xIw8gyTtYchoFe0a"
-            title="Dalgona tutorial"
-            allowfullscreen
-          ></iframe>
-          <p class="helper" style="margin-top: 12px;">
-            Change the video by editing the YouTube embed link in the HTML file.
-          </p>
-        </div>
-      </div>
-    </section>
-
-    <section id="gallery">
-      <span class="pill">Gallery · Shared photos</span>
-      <h2 class="section-title">Upload your dalgona</h2>
-      <p class="section-text">
-        This file supports two modes. If you leave Supabase off, uploads save only on the same device/browser.
-        If you add free Supabase keys, everyone can share the same gallery.
-      </p>
-      <div class="grid">
-        <div class="card">
-          <form id="uploadForm">
-            <label>
-              Name
-              <input id="name" type="text" maxlength="40" placeholder="e.g. Mina" required />
-            </label>
-            <label>
-              Caption (optional)
-              <textarea id="caption" maxlength="140" placeholder="I finished the star!"></textarea>
-            </label>
-            <label>
-              Photo
-              <input id="photo" type="file" accept="image/*" required />
-            </label>
-            <button class="btn btn-primary" type="submit">Upload photo</button>
-            <div class="status" id="status"></div>
-          </form>
-          <p class="helper">
-            Recommended: keep each image under about 4 MB so the page feels faster on phones.
-          </p>
-        </div>
-
-        <div class="card">
-          <strong>Setup mode</strong>
-          <p class="helper" id="modeText" style="margin-top:10px;">
-            Checking mode…
-          </p>
-          <p class="helper">
-            To use shared uploads, create a free Supabase project, a table called <code>entries</code>, and a public storage bucket called <code>dalgona</code>, then paste your project URL and anon key into this file.
-          </p>
-        </div>
-      </div>
-
-      <div class="gallery-controls">
-        <button class="gallery-nav" id="galleryPrev" type="button" aria-label="Previous images">‹</button>
-        <div class="gallery" id="galleryList"></div>
-        <button class="gallery-nav" id="galleryNext" type="button" aria-label="Next images">›</button>
-      </div>
-    </section>
-
-    <footer>
-      Dalgona Challenge page for your Korean cultural festival.<br />
-      Hosted on GitHub Pages, optional shared gallery powered by Supabase.
-    </footer>
-
+  <div id="free-popup">
+    <div class="free-inner">
+      <div class="free-emoji">🍬</div>
+      <div class="free-text">GET A FREE DALGONA!</div>
+      <div class="free-sub">Show this screen at the counter 🎉</div>
+    </div>
   </div>
 
-  <script>
-    const CONFIG = {
-      // Optional shared gallery mode with Supabase.
-      // Leave these blank if you want simple device-only mode.
-      SUPABASE_URL: "https://htknswnjbqsxpmlswxyt.supabase.co",
-      SUPABASE_ANON_KEY: "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Imh0a25zd25qYnFzeHBtbHN3eHl0Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3NzUxMDQwMjAsImV4cCI6MjA5MDY4MDAyMH0.nMPvQ4E4LHCpk8LK8ApzIPuKuwuWgd_jcG27fpsK4pk",
-      SUPABASE_BUCKET: "dalgona",
-      TABLE_NAME: "entries",
-      LOCAL_STORAGE_KEY: "dalgona-gallery-local-v1"
-    };
+  <div id="app">
+    <div class="page active" id="p1">
+      <div class="bg"></div>
+      <div class="bg-overlay"></div>
+      <div class="page-inner">
+        <div class="shapes-row">
+          <svg viewBox="0 0 50 50" class="sh-svg"><circle cx="25" cy="25" r="19" fill="none" stroke="#2e7d32" stroke-width="8" stroke-linecap="round"/></svg>
+          <svg viewBox="0 0 50 50" class="sh-svg"><polygon points="25,5 47,43 3,43" fill="none" stroke="#c62828" stroke-width="7" stroke-linejoin="round" stroke-linecap="round"/></svg>
+          <svg viewBox="0 0 54 54" class="sh-svg"><polygon points="27,4 33,20 51,20 37,30 43,48 27,37 11,48 17,30 3,20 21,20" fill="#f9a825"/></svg>
+          <svg viewBox="0 0 50 54" class="sh-svg"><path d="M25,6 C10,6 4,16 4,24 C4,26 6,26 6,24 C6,18 13,12 25,12 C37,12 44,18 44,24 C44,26 46,26 46,24 C46,16 40,6 25,6 Z" fill="#1565c0"/><path d="M25,12 L25,46" stroke="#1565c0" stroke-width="5" stroke-linecap="round"/><path d="M25,46 C25,50 20,51 20,48" fill="none" stroke="#1565c0" stroke-width="4" stroke-linecap="round"/></svg>
+        </div>
+        <h1 class="welcome-title">WELCOME<br />to the<br />Dalgona<br />Challenge</h1>
+        <div class="welcome-divider"></div>
+        <button class="crayon-btn filled" onclick="goPage('p2')">PRESS TO START</button>
+      </div>
+    </div>
 
-    const statusEl = document.getElementById('status');
-    const galleryListEl = document.getElementById('galleryList');
-    const galleryPrevBtn = document.getElementById('galleryPrev');
-    const galleryNextBtn = document.getElementById('galleryNext');
-    const modeTextEl = document.getElementById('modeText');
-    const formEl = document.getElementById('uploadForm');
-
-    function scrollGallery(amount) {
-      if (!galleryListEl) return;
-      galleryListEl.scrollBy({ left: amount, behavior: 'smooth' });
-    }
-
-    function updateGalleryButtons() {
-      if (!galleryListEl || !galleryPrevBtn || !galleryNextBtn) return;
-      const maxScroll = galleryListEl.scrollWidth - galleryListEl.clientWidth;
-      galleryPrevBtn.disabled = galleryListEl.scrollLeft <= 0;
-      galleryNextBtn.disabled = galleryListEl.scrollLeft >= maxScroll - 1;
-    }
-
-    if (galleryPrevBtn && galleryNextBtn) {
-      galleryPrevBtn.addEventListener('click', () => scrollGallery(-galleryListEl.clientWidth * 0.85));
-      galleryNextBtn.addEventListener('click', () => scrollGallery(galleryListEl.clientWidth * 0.85));
-      galleryListEl.addEventListener('scroll', updateGalleryButtons);
-      window.addEventListener('resize', updateGalleryButtons);
-    }
-
-    function isSupabaseMode() {
-      return Boolean(CONFIG.SUPABASE_URL && CONFIG.SUPABASE_ANON_KEY);
-    }
-
-    function setStatus(text) {
-      statusEl.textContent = text || '';
-    }
-
-    function escapeHtml(str) {
-      return String(str)
-        .replace(/&/g, '&amp;')
-        .replace(/</g, '&lt;')
-        .replace(/>/g, '&gt;')
-        .replace(/"/g, '&quot;')
-        .replace(/'/g, '&#039;');
-    }
-
-    function getLocalEntries() {
-      try {
-        return JSON.parse(localStorage.getItem(CONFIG.LOCAL_STORAGE_KEY) || '[]');
-      } catch {
-        return [];
-      }
-    }
-
-    function saveLocalEntries(entries) {
-      localStorage.setItem(CONFIG.LOCAL_STORAGE_KEY, JSON.stringify(entries));
-    }
-
-    function renderEntries(entries) {
-      if (!entries || entries.length === 0) {
-        galleryListEl.innerHTML = '<div class="empty">No photos yet. Be the first to upload one.</div>';
-        updateGalleryButtons();
-        return;
-      }
-
-      galleryListEl.innerHTML = entries.map(item => `
-        <article class="gallery-item">
-          <img src="${escapeHtml(item.image_url)}" alt="Dalgona uploaded by ${escapeHtml(item.name)}" />
-          <div class="meta">
-            <h3>${escapeHtml(item.name)}</h3>
-            <p>${escapeHtml(item.caption || 'Dalgona challenge entry')}</p>
+    <div class="page" id="p2">
+      <div class="bg"></div>
+      <div class="bg-overlay"></div>
+      <button class="back-btn" onclick="goPage('p1')">← Back</button>
+      <div class="page-inner">
+        <div class="shapes-row">
+          <svg viewBox="0 0 50 50" class="sh-svg"><circle cx="25" cy="25" r="19" fill="none" stroke="#2e7d32" stroke-width="8" stroke-linecap="round"/></svg>
+          <svg viewBox="0 0 50 50" class="sh-svg"><polygon points="25,5 47,43 3,43" fill="none" stroke="#c62828" stroke-width="7" stroke-linejoin="round" stroke-linecap="round"/></svg>
+          <svg viewBox="0 0 54 54" class="sh-svg"><polygon points="27,4 33,20 51,20 37,30 43,48 27,37 11,48 17,30 3,20 21,20" fill="#f9a825"/></svg>
+          <svg viewBox="0 0 50 54" class="sh-svg"><path d="M25,6 C10,6 4,16 4,24 C4,26 6,26 6,24 C6,18 13,12 25,12 C37,12 44,18 44,24 C44,26 46,26 46,24 C46,16 40,6 25,6 Z" fill="#1565c0"/><path d="M25,12 L25,46" stroke="#1565c0" stroke-width="5" stroke-linecap="round"/><path d="M25,46 C25,50 20,51 20,48" fill="none" stroke="#1565c0" stroke-width="4" stroke-linecap="round"/></svg>
+        </div>
+        <p class="page-title">How to Play</p>
+        <div class="steps-container">
+          <div class="step-row">
+            <div class="step-num">1</div>
+            <p class="step-text">Carve out your dalgona shape</p>
           </div>
-        </article>
-      `).join('');
-      updateGalleryButtons();
+          <div class="step-row">
+            <div class="step-num">2</div>
+            <p class="step-text">Upload a photo of your cookie</p>
+          </div>
+          <div class="step-row">
+            <div class="step-num">3</div>
+            <p class="step-text">If you succeed, get a free dalgona!</p>
+          </div>
+          <div class="step-row">
+            <div class="step-num">4</div>
+            <p class="step-text">See everyone's results in the gallery!</p>
+          </div>
+        </div>
+        <div class="btn-row">
+          <button class="crayon-btn filled" onclick="goPage('p3')" style="width: 100%">
+            UPLOAD
+          </button>
+          <button class="crayon-btn ghost" onclick="goPage('p4')" style="width: 100%">
+            Skip to Gallery →
+          </button>
+        </div>
+      </div>
+    </div>
+
+    <div class="page" id="p3">
+      <div class="bg"></div>
+      <div class="bg-overlay"></div>
+      <button class="back-btn" onclick="goPage('p2')">← Back</button>
+      <div class="page-inner" style="padding-top: 2.2rem">
+        <div class="shapes-row">
+          <svg viewBox="0 0 50 50" class="sh-svg"><circle cx="25" cy="25" r="19" fill="none" stroke="#2e7d32" stroke-width="8" stroke-linecap="round"/></svg>
+          <svg viewBox="0 0 50 50" class="sh-svg"><polygon points="25,5 47,43 3,43" fill="none" stroke="#c62828" stroke-width="7" stroke-linejoin="round" stroke-linecap="round"/></svg>
+          <svg viewBox="0 0 54 54" class="sh-svg"><polygon points="27,4 33,20 51,20 37,30 43,48 27,37 11,48 17,30 3,20 21,20" fill="#f9a825"/></svg>
+          <svg viewBox="0 0 50 54" class="sh-svg"><path d="M25,6 C10,6 4,16 4,24 C4,26 6,26 6,24 C6,18 13,12 25,12 C37,12 44,18 44,24 C44,26 46,26 46,24 C46,16 40,6 25,6 Z" fill="#1565c0"/><path d="M25,12 L25,46" stroke="#1565c0" stroke-width="5" stroke-linecap="round"/><path d="M25,46 C25,50 20,51 20,48" fill="none" stroke="#1565c0" stroke-width="4" stroke-linecap="round"/></svg>
+        </div>
+
+        <div class="upload-card">
+          <div>
+            <label class="field-label">NAME</label>
+            <input class="field-input" id="inp-name" type="text" placeholder="Your name…" maxlength="30" />
+          </div>
+
+          <div>
+            <label class="field-label">SUCCESS?</label>
+            <div class="success-toggle">
+              <button type="button" class="stog-btn" id="btn-yes" onclick="setSuccess(true)">YES</button>
+              <button type="button" class="stog-btn" id="btn-no" onclick="setSuccess(false)">NO</button>
+            </div>
+          </div>
+
+          <div>
+            <label class="field-label">REVIEW</label>
+            <div class="star-row" id="star-row">
+              <span class="star" onclick="setStar(1)">⭐</span>
+              <span class="star" onclick="setStar(2)">⭐</span>
+              <span class="star" onclick="setStar(3)">⭐</span>
+              <span class="star" onclick="setStar(4)">⭐</span>
+              <span class="star" onclick="setStar(5)">⭐</span>
+            </div>
+            <textarea class="field-input" id="inp-review" placeholder="How was it?"></textarea>
+          </div>
+
+          <div>
+            <label class="field-label">PHOTO</label>
+            <div class="photo-dz" id="dz">
+              <input type="file" id="file-inp" accept="image/*" onchange="handleFile(event)" />
+              <div id="dz-inner" class="dz-placeholder">
+                <div class="dz-icon">📷</div>
+                <p>Tap to choose a photo</p>
+              </div>
+            </div>
+          </div>
+
+          <button class="crayon-btn filled" onclick="submitEntry()" style="width: 100%">
+            UPLOAD IMAGE
+          </button>
+        </div>
+      </div>
+    </div>
+
+    <div class="page" id="p4">
+      <div class="bg"></div>
+      <div class="bg-overlay"></div>
+      <button class="back-btn" onclick="goPage('p2')">← Back</button>
+      <div class="page-inner" style="padding-top: 1.8rem">
+        <div class="shapes-row">
+          <svg viewBox="0 0 50 50" class="sh-svg"><circle cx="25" cy="25" r="19" fill="none" stroke="#2e7d32" stroke-width="8" stroke-linecap="round"/></svg>
+          <svg viewBox="0 0 50 50" class="sh-svg"><polygon points="25,5 47,43 3,43" fill="none" stroke="#c62828" stroke-width="7" stroke-linejoin="round" stroke-linecap="round"/></svg>
+          <svg viewBox="0 0 54 54" class="sh-svg"><polygon points="27,4 33,20 51,20 37,30 43,48 27,37 11,48 17,30 3,20 21,20" fill="#f9a825"/></svg>
+          <svg viewBox="0 0 50 54" class="sh-svg"><path d="M25,6 C10,6 4,16 4,24 C4,26 6,26 6,24 C6,18 13,12 25,12 C37,12 44,18 44,24 C44,26 46,26 46,24 C46,16 40,6 25,6 Z" fill="#1565c0"/><path d="M25,12 L25,46" stroke="#1565c0" stroke-width="5" stroke-linecap="round"/><path d="M25,46 C25,50 20,51 20,48" fill="none" stroke="#1565c0" stroke-width="4" stroke-linecap="round"/></svg>
+        </div>
+        <h2 class="gallery-title">GALLERY</h2>
+        <div class="gallery-grid" id="gallery-grid">
+          <div class="empty-gallery"><div class="ei">🍬</div><p>Be the first to upload!</p></div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+  <script>
+    const SUPABASE_URL = "https://htknswnjbqsxpmlswxyt.supabase.co";
+    const SUPABASE_ANON_KEY = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Imh0a25zd25qYnFzeHBtbHN3eHl0Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3NzUxMDQwMjAsImV4cCI6MjA5MDY4MDAyMH0.nMPvQ4E4LHCpk8LK8ApzIPuKuwuWgd_jcG27fpsK4pk";
+    const SUPABASE_BUCKET = "dalgona";
+
+    const supabase = window.supabase.createClient(
+      SUPABASE_URL,
+      SUPABASE_ANON_KEY
+    );
+
+    let currentPage = "p1";
+    let currentImg = null;
+    let starVal = 0;
+    let successVal = null;
+    let toastTimer = null;
+
+    function goPage(nextId) {
+      if (nextId === currentPage) return;
+      const current = document.getElementById(currentPage);
+      const next = document.getElementById(nextId);
+
+      current.classList.remove("active");
+      current.classList.add("exit-left");
+
+      setTimeout(() => {
+        current.classList.remove("exit-left");
+      }, 420);
+
+      next.classList.add("active");
+      currentPage = nextId;
+
+      if (nextId === "p4") {
+        loadGallery();
+      }
     }
 
-    async function loadSupabaseScript() {
-      if (window.supabase) return;
-      await new Promise((resolve, reject) => {
-        const s = document.createElement('script');
-        s.src = 'https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2';
-        s.onload = resolve;
-        s.onerror = reject;
-        document.head.appendChild(s);
+    function showToast(msg) {
+      const el = document.getElementById("toast");
+      el.textContent = msg;
+      el.classList.add("show");
+      clearTimeout(toastTimer);
+      toastTimer = setTimeout(() => el.classList.remove("show"), 2200);
+    }
+
+    function setStar(n) {
+      starVal = n;
+      document.querySelectorAll(".star").forEach((el, i) => {
+        el.classList.toggle("lit", i < n);
       });
     }
 
-    async function loadEntries() {
-      if (!isSupabaseMode()) {
-        modeTextEl.textContent = 'Local mode: uploads save only on the same phone or browser. For a real shared gallery, add Supabase.';
-        const entries = getLocalEntries().reverse();
-        renderEntries(entries);
+    function setSuccess(val) {
+      successVal = val;
+      document.getElementById("btn-yes").classList.toggle("sel-yes", val === true);
+      document.getElementById("btn-no").classList.toggle("sel-no", val === false);
+    }
+
+    function handleFile(event) {
+      const file = event.target.files?.[0];
+      if (!file) return;
+
+      const reader = new FileReader();
+      reader.onload = (e) => {
+        currentImg = e.target.result;
+        document.getElementById("dz-inner").innerHTML =
+          '<img class="dz-preview" src="' + currentImg + '" alt="Preview">';
+      };
+      reader.readAsDataURL(file);
+    }
+
+    function esc(str) {
+      return String(str || "").replace(/[&<>"']/g, (m) => ({
+        "&": "&amp;",
+        "<": "&lt;",
+        ">": "&gt;",
+        '"': "&quot;",
+        "'": "&#39;"
+      })[m]);
+    }
+
+    function renderGallery(entries) {
+      const grid = document.getElementById("gallery-grid");
+
+      if (!entries || entries.length === 0) {
+        grid.innerHTML =
+          '<div class="empty-gallery"><div class="ei">🍬</div><p>Be the first to upload!</p></div>';
         return;
       }
 
-      modeTextEl.textContent = 'Shared mode: all festival guests can see the same gallery.';
+      grid.innerHTML = entries
+        .map((e) => {
+          const stars = "⭐".repeat(Number(e.stars || 0));
+          const badge = e.success === true
+            ? '<span class="badge badge-win">SUCCESS</span>'
+            : e.success === false
+            ? '<span class="badge badge-fail">FAILED</span>'
+            : "";
 
+          return `
+            <div class="g-card">
+              <img src="${esc(e.image_url)}" alt="${esc(e.name)}" loading="lazy" />
+              <div class="g-card-info">
+                <div class="g-card-name">${esc(e.name || "Anonymous")} ${badge}</div>
+                <div class="g-card-stars">${stars}</div>
+                <div class="g-review">${esc(e.review || "")}</div>
+              </div>
+            </div>
+          `;
+        })
+        .join("");
+    }
+
+    async function loadGallery() {
       try {
-        await loadSupabaseScript();
-        const client = window.supabase.createClient(CONFIG.SUPABASE_URL, CONFIG.SUPABASE_ANON_KEY);
-        const { data, error } = await client
-          .from(CONFIG.TABLE_NAME)
-          .select('name, caption, image_url, created_at')
-          .order('created_at', { ascending: false });
+        const { data, error } = await supabase
+          .from("entries")
+          .select("*")
+          .order("created_at", { ascending: false });
 
         if (error) throw error;
-        renderEntries(data || []);
+        renderGallery(data || []);
       } catch (err) {
         console.error(err);
-        renderEntries([]);
-        modeTextEl.textContent = 'Shared mode failed to load. Check your Supabase URL, anon key, table name, and bucket name.';
+        showToast("Could not load gallery");
       }
     }
 
-    async function uploadLocal(file, name, caption) {
-      const reader = new FileReader();
-      const imageUrl = await new Promise((resolve, reject) => {
-        reader.onload = () => resolve(reader.result);
-        reader.onerror = reject;
-        reader.readAsDataURL(file);
-      });
+    function showFreePopup() {
+      const popup = document.getElementById("free-popup");
+      popup.classList.remove("hide");
+      popup.classList.add("show");
 
-      const entries = getLocalEntries();
-      entries.push({
-        name,
-        caption,
-        image_url: imageUrl,
-        created_at: new Date().toISOString()
-      });
-      saveLocalEntries(entries);
+      setTimeout(() => {
+        popup.classList.remove("show");
+        popup.classList.add("hide");
+      }, 2000);
     }
 
-    async function uploadSupabase(file, name, caption) {
-      await loadSupabaseScript();
-      const client = window.supabase.createClient(CONFIG.SUPABASE_URL, CONFIG.SUPABASE_ANON_KEY);
-      const extension = (file.name.split('.').pop() || 'jpg').toLowerCase();
-      const fileName = `${Date.now()}-${Math.random().toString(36).slice(2)}.${extension}`;
-      const path = `uploads/${fileName}`;
+    function triggerConfetti() {
+      const canvas = document.getElementById("conf");
+      const ctx = canvas.getContext("2d");
 
-      const { error: uploadError } = await client.storage
-        .from(CONFIG.SUPABASE_BUCKET)
-        .upload(path, file, { upsert: false });
+      canvas.width = window.innerWidth;
+      canvas.height = window.innerHeight;
 
-      if (uploadError) throw uploadError;
+      const pieces = Array.from({ length: 120 }, () => ({
+        x: Math.random() * canvas.width,
+        y: -20 - Math.random() * canvas.height * 0.5,
+        r: 3 + Math.random() * 5,
+        vy: 2 + Math.random() * 4,
+        vx: -2 + Math.random() * 4,
+        rot: Math.random() * Math.PI,
+        vr: -0.2 + Math.random() * 0.4,
+        color: ["#f5c518", "#e8a500", "#2e7d32", "#c62828", "#1565c0"][Math.floor(Math.random() * 5)]
+      }));
 
-      const { data: publicData } = client.storage
-        .from(CONFIG.SUPABASE_BUCKET)
-        .getPublicUrl(path);
+      let frame = 0;
+      function draw() {
+        frame++;
+        ctx.clearRect(0, 0, canvas.width, canvas.height);
 
-      const { error: dbError } = await client
-        .from(CONFIG.TABLE_NAME)
-        .insert({
-          name,
-          caption,
-          image_url: publicData.publicUrl
+        pieces.forEach((p) => {
+          p.x += p.vx;
+          p.y += p.vy;
+          p.rot += p.vr;
+
+          ctx.save();
+          ctx.translate(p.x, p.y);
+          ctx.rotate(p.rot);
+          ctx.fillStyle = p.color;
+          ctx.fillRect(-p.r, -p.r, p.r * 2, p.r * 2);
+          ctx.restore();
         });
 
-      if (dbError) throw dbError;
+        if (frame < 120) {
+          requestAnimationFrame(draw);
+        } else {
+          ctx.clearRect(0, 0, canvas.width, canvas.height);
+        }
+      }
+      draw();
     }
 
-    formEl.addEventListener('submit', async (event) => {
-      event.preventDefault();
-      const name = document.getElementById('name').value.trim();
-      const caption = document.getElementById('caption').value.trim();
-      const file = document.getElementById('photo').files[0];
+    function resetForm() {
+      document.getElementById("inp-name").value = "";
+      document.getElementById("inp-review").value = "";
+      document.getElementById("file-inp").value = "";
+      document.getElementById("dz-inner").innerHTML = `
+        <div class="dz-placeholder">
+          <div class="dz-icon">📷</div>
+          <p>Tap to choose a photo</p>
+        </div>
+      `;
+      currentImg = null;
+      starVal = 0;
+      successVal = null;
+      document.querySelectorAll(".star").forEach((el) => el.classList.remove("lit"));
+      document.getElementById("btn-yes").classList.remove("sel-yes");
+      document.getElementById("btn-no").classList.remove("sel-no");
+    }
 
-      if (!name || !file) {
-        setStatus('Please add your name and photo.');
+    async function submitEntry() {
+      const name = document.getElementById("inp-name").value.trim() || "Anonymous";
+      const review = document.getElementById("inp-review").value.trim();
+
+      if (!currentImg) {
+        showToast("Add a photo first");
+        return;
+      }
+
+      if (!starVal) {
+        showToast("Add a star rating");
         return;
       }
 
       try {
-        setStatus('Uploading...');
-        if (isSupabaseMode()) {
-          await uploadSupabase(file, name, caption);
-        } else {
-          await uploadLocal(file, name, caption);
-        }
+        const response = await fetch(currentImg);
+        const blob = await response.blob();
+        const fileName = `dalgona-${Date.now()}.jpg`;
 
-        formEl.reset();
-        setStatus('Upload complete.');
-        await loadEntries();
+        const { error: uploadError } = await supabase.storage
+          .from(SUPABASE_BUCKET)
+          .upload(fileName, blob, {
+            contentType: blob.type || "image/jpeg",
+            upsert: false
+          });
+
+        if (uploadError) throw uploadError;
+
+        const { data: publicUrlData } = supabase.storage
+          .from(SUPABASE_BUCKET)
+          .getPublicUrl(fileName);
+
+        const imageUrl = publicUrlData.publicUrl;
+
+        const { error: insertError } = await supabase
+          .from("entries")
+          .insert([
+            {
+              name,
+              review,
+              stars: starVal,
+              success: successVal,
+              image_url: imageUrl
+            }
+          ]);
+
+        if (insertError) throw insertError;
+
+        showToast("Uploaded!");
+        showFreePopup();
+        triggerConfetti();
+        resetForm();
+        await loadGallery();
+        setTimeout(() => goPage("p4"), 500);
       } catch (err) {
         console.error(err);
-        setStatus('Upload failed. Check your setup and try again.');
+        showToast("Upload failed");
       }
-    });
+    }
 
-    loadEntries();
+    window.addEventListener("load", () => {
+      loadGallery();
+    });
   </script>
 </body>
 </html>
