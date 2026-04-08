@@ -4,7 +4,7 @@
 <meta charset="UTF-8"/>
 <meta name="viewport" content="width=device-width,initial-scale=1.0,maximum-scale=1.0,user-scalable=no"/>
 <title>Dalgona Challenge</title>
-<link href="https://fonts.googleapis.com/css2?family=Teko:wght@400;500;600;700&family=Noto+Sans+KR:wght@400;700&display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Teko:wght@400;500;600;700&family=Roboto:wght@400;500&family=Noto+Sans+KR:wght@400;700&display=swap" rel="stylesheet"/>
 <style>
 *{margin:0;padding:0;box-sizing:border-box;-webkit-tap-highlight-color:transparent;}
 :root{
@@ -68,7 +68,7 @@ html,body{width:100%;height:100%;overflow:hidden;background:#0d0800;}
 .crayon-btn.ghost:hover{opacity:.85;}
 
 /* PAGE 2 */
-#p2 .page-inner{padding-top:1.6rem;}
+#p2 .page-inner{padding-top:1.6rem;justify-content:center;}
 .page-title{font-family:'Teko',sans-serif;font-size:clamp(20px,6vw,28px);color:var(--brown);font-weight:700;margin-bottom:.8rem;text-align:center;letter-spacing:1px;}
 .steps-container{width:100%;max-width:360px;display:flex;flex-direction:column;gap:.6rem;margin-bottom:.9rem;}
 .step-row{
@@ -81,7 +81,7 @@ html,body{width:100%;height:100%;overflow:hidden;background:#0d0800;}
   display:flex;align-items:center;justify-content:center;
   font-family:'Teko',sans-serif;font-size:16px;font-weight:700;color:var(--brown);
 }
-.step-text{font-family:'Teko',sans-serif;font-size:clamp(15px,4.5vw,20px);font-weight:700;color:var(--brown);}
+.step-text{font-family:'Roboto',sans-serif;font-size:clamp(13px,3.8vw,17px);font-weight:400;color:var(--brown);}
 .btn-row{display:flex;flex-direction:column;gap:.55rem;width:100%;max-width:320px;align-items:center;}
 
 /* PAGE 3 */
@@ -92,13 +92,13 @@ html,body{width:100%;height:100%;overflow:hidden;background:#0d0800;}
   display:flex;flex-direction:column;gap:.65rem;
 }
 .field-label{font-family:'Teko',sans-serif;font-size:clamp(15px,5vw,19px);font-weight:700;color:var(--brown);margin-bottom:.15rem;display:block;}
-.field-input{
+.field-input{font-family:Arial,sans-serif!important;
   width:100%;background:rgba(255,255,255,.85);border:1.5px solid rgba(92,61,10,.28);
-  color:var(--brown);padding:.5rem .8rem;font-family:'Teko',sans-serif;font-size:16px;
+  color:var(--brown);padding:.5rem .8rem;font-family:'Roboto',sans-serif;font-size:16px;
   border-radius:6px;outline:none;transition:border-color .2s;
 }
 .field-input:focus{border-color:var(--amber);}
-textarea.field-input{resize:none;height:56px;line-height:1.4;}
+textarea.field-input{font-family:Arial,sans-serif!important;resize:none;height:56px;line-height:1.4;}
 .success-toggle{display:flex;gap:.5rem;}
 .stog-btn{
   font-family:'Teko',sans-serif;font-size:15px;font-weight:700;
@@ -126,13 +126,14 @@ textarea.field-input{resize:none;height:56px;line-height:1.4;}
 #p4 .page-inner{padding-top:1.6rem;}
 .gallery-title{font-family:'Teko',sans-serif;font-size:clamp(34px,11vw,54px);font-weight:700;color:var(--brown);margin-bottom:.7rem;text-align:center;}
 .gallery-grid{
-  width:100%;max-width:360px;display:grid;grid-template-columns:1fr 1fr;gap:.55rem;
+  width:100%;max-width:360px;display:grid;grid-template-columns:1fr 1fr 1fr;gap:4px;
   overflow-y:auto;flex:1;padding-bottom:.5rem;scrollbar-width:none;
+  
 }
 .gallery-grid::-webkit-scrollbar{display:none;}
-.g-card{border:2.5px solid var(--brown);border-radius:8px;overflow:hidden;background:rgba(255,253,245,.9);animation:card-pop .35s cubic-bezier(.22,1,.36,1);}
+.g-card{border:none;border-radius:8px;overflow:hidden;background:rgba(255,253,245,.35);animation:card-pop .35s cubic-bezier(.22,1,.36,1);}
 @keyframes card-pop{from{opacity:0;transform:scale(.9);}to{opacity:1;transform:scale(1);}}
-.g-card img{width:100%;aspect-ratio:1;object-fit:cover;display:block;}
+.g-card img{width:100%;aspect-ratio:1;object-fit:cover;display:block;border-radius:6px;}
 .g-card-info{padding:.3rem .4rem;}
 .g-card-name{font-family:'Teko',sans-serif;font-size:13px;font-weight:700;color:var(--brown);}
 .g-card-stars{font-size:10px;line-height:1.2;}
@@ -181,7 +182,40 @@ textarea.field-input{resize:none;height:56px;line-height:1.4;}
 .toast.show{transform:translateX(-50%) translateY(0);}
 
 #conf{position:fixed;inset:0;pointer-events:none;z-index:700;}
+
+/* LIGHTBOX */
+#lightbox{
+  display:none;position:fixed;inset:0;z-index:600;
+  background:rgba(255,255,255,.97);
+  align-items:center;justify-content:center;flex-direction:column;
+  padding:1.5rem;
+}
+#lightbox.open{display:flex;}
+#lightbox-img{
+  width:100%;max-width:380px;max-height:70svh;
+  object-fit:contain;border-radius:10px;
+  animation:lb-in .3s cubic-bezier(.22,1,.36,1);
+  box-shadow:0 8px 40px rgba(0,0,0,.35), 0 2px 12px rgba(0,0,0,.2);
+}
+@keyframes lb-in{from{opacity:0;transform:scale(.88);}to{opacity:1;transform:scale(1);}}
+#lightbox-info{
+  margin-top:.9rem;text-align:center;
+}
+#lightbox-name{
+  font-family:'Teko',sans-serif;font-size:22px;font-weight:500;
+  color:#333;letter-spacing:1px;
+}
+#lightbox-time{
+  font-family:'Roboto',sans-serif;font-size:12px;
+  color:rgba(0,0,0,.4);margin-top:.2rem;
+}
+#lightbox-close{
+  position:absolute;top:1rem;right:1.2rem;
+  font-size:28px;color:rgba(0,0,0,.5);cursor:pointer;
+  background:none;border:none;line-height:1;
+}
 </style>
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
 </head>
 <body>
 <canvas id="conf"></canvas>
@@ -201,10 +235,10 @@ textarea.field-input{resize:none;height:56px;line-height:1.4;}
   <div class="bg" id="bg-p1"></div><div class="bg-overlay"></div>
   <div class="page-inner">
     <div class="shapes-row">
-      <svg viewBox="0 0 50 50" class="sh-svg"><circle cx="25" cy="25" r="19" fill="none" stroke="#2e7d32" stroke-width="8" stroke-linecap="round"/></svg>
-      <svg viewBox="0 0 50 50" class="sh-svg"><polygon points="25,5 47,43 3,43" fill="none" stroke="#c62828" stroke-width="7" stroke-linejoin="round" stroke-linecap="round"/></svg>
-      <svg viewBox="0 0 54 54" class="sh-svg"><polygon points="27,4 33,20 51,20 37,30 43,48 27,37 11,48 17,30 3,20 21,20" fill="#f9a825"/></svg>
-      <svg viewBox="0 0 50 54" class="sh-svg"><path d="M25,6 C10,6 4,16 4,24 C4,26 6,26 6,24 C6,18 13,12 25,12 C37,12 44,18 44,24 C44,26 46,26 46,24 C46,16 40,6 25,6 Z" fill="#1565c0"/><path d="M25,12 L25,46" stroke="#1565c0" stroke-width="5" stroke-linecap="round"/><path d="M25,46 C25,50 20,51 20,48" fill="none" stroke="#1565c0" stroke-width="4" stroke-linecap="round"/></svg>
+      <svg viewBox="0 0 50 50" class="sh-svg"><circle cx="25" cy="25" r="19" fill="none" stroke="#2e7d32" stroke-width="7" stroke-linecap="round"/></svg>
+      <svg viewBox="0 0 50 50" class="sh-svg"><polygon points="25,5 46,42 4,42" fill="none" stroke="#c62828" stroke-width="7" stroke-linejoin="round" stroke-linecap="round"/></svg>
+      <svg viewBox="0 0 50 50" class="sh-svg"><polygon points="25,3 31,17 46,17 35,27 39,43 25,33 11,43 15,27 4,17 19,17" fill="none" stroke="#f9a825" stroke-width="5.5" stroke-linejoin="round"/></svg>
+      <svg viewBox="0 0 50 55" class="sh-svg"><path d="M6,26 Q6,7 25,7 Q44,7 44,26 Z" fill="none" stroke="#1565c0" stroke-width="6" stroke-linejoin="round" stroke-linecap="round"/><path d="M25,7 L25,5" fill="none" stroke="#1565c0" stroke-width="6" stroke-linecap="round"/><line x1="25" y1="26" x2="25" y2="43" stroke="#1565c0" stroke-width="6" stroke-linecap="round"/><path d="M25,43 Q25,51 18,51 Q14,51 14,47 Q14,44 17,44" fill="none" stroke="#1565c0" stroke-width="6" stroke-linecap="round"/></svg>
     </div>
     <h1 class="welcome-title">WELCOME<br/>to the<br/>Dalgona<br/>Challenge</h1>
     <div class="welcome-divider"></div>
@@ -219,10 +253,10 @@ textarea.field-input{resize:none;height:56px;line-height:1.4;}
   <button class="back-btn" onclick="goPage('p1')">← Back</button>
   <div class="page-inner">
     <div class="shapes-row">
-      <svg viewBox="0 0 50 50" class="sh-svg"><circle cx="25" cy="25" r="19" fill="none" stroke="#2e7d32" stroke-width="8" stroke-linecap="round"/></svg>
-      <svg viewBox="0 0 50 50" class="sh-svg"><polygon points="25,5 47,43 3,43" fill="none" stroke="#c62828" stroke-width="7" stroke-linejoin="round" stroke-linecap="round"/></svg>
-      <svg viewBox="0 0 54 54" class="sh-svg"><polygon points="27,4 33,20 51,20 37,30 43,48 27,37 11,48 17,30 3,20 21,20" fill="#f9a825"/></svg>
-      <svg viewBox="0 0 50 54" class="sh-svg"><path d="M25,6 C10,6 4,16 4,24 C4,26 6,26 6,24 C6,18 13,12 25,12 C37,12 44,18 44,24 C44,26 46,26 46,24 C46,16 40,6 25,6 Z" fill="#1565c0"/><path d="M25,12 L25,46" stroke="#1565c0" stroke-width="5" stroke-linecap="round"/><path d="M25,46 C25,50 20,51 20,48" fill="none" stroke="#1565c0" stroke-width="4" stroke-linecap="round"/></svg>
+      <svg viewBox="0 0 50 50" class="sh-svg"><circle cx="25" cy="25" r="19" fill="none" stroke="#2e7d32" stroke-width="7" stroke-linecap="round"/></svg>
+      <svg viewBox="0 0 50 50" class="sh-svg"><polygon points="25,5 46,42 4,42" fill="none" stroke="#c62828" stroke-width="7" stroke-linejoin="round" stroke-linecap="round"/></svg>
+      <svg viewBox="0 0 50 50" class="sh-svg"><polygon points="25,3 31,17 46,17 35,27 39,43 25,33 11,43 15,27 4,17 19,17" fill="none" stroke="#f9a825" stroke-width="5.5" stroke-linejoin="round"/></svg>
+      <svg viewBox="0 0 50 55" class="sh-svg"><path d="M6,26 Q6,7 25,7 Q44,7 44,26 Z" fill="none" stroke="#1565c0" stroke-width="6" stroke-linejoin="round" stroke-linecap="round"/><path d="M25,7 L25,5" fill="none" stroke="#1565c0" stroke-width="6" stroke-linecap="round"/><line x1="25" y1="26" x2="25" y2="43" stroke="#1565c0" stroke-width="6" stroke-linecap="round"/><path d="M25,43 Q25,51 18,51 Q14,51 14,47 Q14,44 17,44" fill="none" stroke="#1565c0" stroke-width="6" stroke-linecap="round"/></svg>
     </div>
     <p class="page-title">How to Play</p>
     <div class="steps-container">
@@ -232,7 +266,7 @@ textarea.field-input{resize:none;height:56px;line-height:1.4;}
       </div>
       <div class="step-row">
         <div class="step-num">2</div>
-        <p class="step-text">Upload a photo of your cookie</p>
+        <p class="step-text">Upload a photo of your dalgona</p>
       </div>
       <div class="step-row">
         <div class="step-num">3</div>
@@ -257,10 +291,10 @@ textarea.field-input{resize:none;height:56px;line-height:1.4;}
   <button class="back-btn" onclick="goPage('p2')">← Back</button>
   <div class="page-inner" style="padding-top:2.2rem;">
     <div class="shapes-row">
-      <svg viewBox="0 0 50 50" class="sh-svg"><circle cx="25" cy="25" r="19" fill="none" stroke="#2e7d32" stroke-width="8" stroke-linecap="round"/></svg>
-      <svg viewBox="0 0 50 50" class="sh-svg"><polygon points="25,5 47,43 3,43" fill="none" stroke="#c62828" stroke-width="7" stroke-linejoin="round" stroke-linecap="round"/></svg>
-      <svg viewBox="0 0 54 54" class="sh-svg"><polygon points="27,4 33,20 51,20 37,30 43,48 27,37 11,48 17,30 3,20 21,20" fill="#f9a825"/></svg>
-      <svg viewBox="0 0 50 54" class="sh-svg"><path d="M25,6 C10,6 4,16 4,24 C4,26 6,26 6,24 C6,18 13,12 25,12 C37,12 44,18 44,24 C44,26 46,26 46,24 C46,16 40,6 25,6 Z" fill="#1565c0"/><path d="M25,12 L25,46" stroke="#1565c0" stroke-width="5" stroke-linecap="round"/><path d="M25,46 C25,50 20,51 20,48" fill="none" stroke="#1565c0" stroke-width="4" stroke-linecap="round"/></svg>
+      <svg viewBox="0 0 50 50" class="sh-svg"><circle cx="25" cy="25" r="19" fill="none" stroke="#2e7d32" stroke-width="7" stroke-linecap="round"/></svg>
+      <svg viewBox="0 0 50 50" class="sh-svg"><polygon points="25,5 46,42 4,42" fill="none" stroke="#c62828" stroke-width="7" stroke-linejoin="round" stroke-linecap="round"/></svg>
+      <svg viewBox="0 0 50 50" class="sh-svg"><polygon points="25,3 31,17 46,17 35,27 39,43 25,33 11,43 15,27 4,17 19,17" fill="none" stroke="#f9a825" stroke-width="5.5" stroke-linejoin="round"/></svg>
+      <svg viewBox="0 0 50 55" class="sh-svg"><path d="M6,26 Q6,7 25,7 Q44,7 44,26 Z" fill="none" stroke="#1565c0" stroke-width="6" stroke-linejoin="round" stroke-linecap="round"/><path d="M25,7 L25,5" fill="none" stroke="#1565c0" stroke-width="6" stroke-linecap="round"/><line x1="25" y1="26" x2="25" y2="43" stroke="#1565c0" stroke-width="6" stroke-linecap="round"/><path d="M25,43 Q25,51 18,51 Q14,51 14,47 Q14,44 17,44" fill="none" stroke="#1565c0" stroke-width="6" stroke-linecap="round"/></svg>
     </div>
     <div class="upload-card">
       <div>
@@ -300,10 +334,10 @@ textarea.field-input{resize:none;height:56px;line-height:1.4;}
   <button class="back-btn" onclick="goPage('p2')">← Back</button>
   <div class="page-inner" style="padding-top:1.8rem;">
     <div class="shapes-row">
-      <svg viewBox="0 0 50 50" class="sh-svg"><circle cx="25" cy="25" r="19" fill="none" stroke="#2e7d32" stroke-width="8" stroke-linecap="round"/></svg>
-      <svg viewBox="0 0 50 50" class="sh-svg"><polygon points="25,5 47,43 3,43" fill="none" stroke="#c62828" stroke-width="7" stroke-linejoin="round" stroke-linecap="round"/></svg>
-      <svg viewBox="0 0 54 54" class="sh-svg"><polygon points="27,4 33,20 51,20 37,30 43,48 27,37 11,48 17,30 3,20 21,20" fill="#f9a825"/></svg>
-      <svg viewBox="0 0 50 54" class="sh-svg"><path d="M25,6 C10,6 4,16 4,24 C4,26 6,26 6,24 C6,18 13,12 25,12 C37,12 44,18 44,24 C44,26 46,26 46,24 C46,16 40,6 25,6 Z" fill="#1565c0"/><path d="M25,12 L25,46" stroke="#1565c0" stroke-width="5" stroke-linecap="round"/><path d="M25,46 C25,50 20,51 20,48" fill="none" stroke="#1565c0" stroke-width="4" stroke-linecap="round"/></svg>
+      <svg viewBox="0 0 50 50" class="sh-svg"><circle cx="25" cy="25" r="19" fill="none" stroke="#2e7d32" stroke-width="7" stroke-linecap="round"/></svg>
+      <svg viewBox="0 0 50 50" class="sh-svg"><polygon points="25,5 46,42 4,42" fill="none" stroke="#c62828" stroke-width="7" stroke-linejoin="round" stroke-linecap="round"/></svg>
+      <svg viewBox="0 0 50 50" class="sh-svg"><polygon points="25,3 31,17 46,17 35,27 39,43 25,33 11,43 15,27 4,17 19,17" fill="none" stroke="#f9a825" stroke-width="5.5" stroke-linejoin="round"/></svg>
+      <svg viewBox="0 0 50 55" class="sh-svg"><path d="M6,26 Q6,7 25,7 Q44,7 44,26 Z" fill="none" stroke="#1565c0" stroke-width="6" stroke-linejoin="round" stroke-linecap="round"/><path d="M25,7 L25,5" fill="none" stroke="#1565c0" stroke-width="6" stroke-linecap="round"/><line x1="25" y1="26" x2="25" y2="43" stroke="#1565c0" stroke-width="6" stroke-linecap="round"/><path d="M25,43 Q25,51 18,51 Q14,51 14,47 Q14,44 17,44" fill="none" stroke="#1565c0" stroke-width="6" stroke-linecap="round"/></svg>
     </div>
     <h2 class="gallery-title">GALLERY</h2>
     <div class="gallery-grid" id="gallery-grid">
@@ -311,6 +345,7 @@ textarea.field-input{resize:none;height:56px;line-height:1.4;}
     </div>
   </div>
 </div>
+
 
 </div>
 
@@ -368,26 +403,32 @@ dz.addEventListener('drop',e=>{
   handleFile({target:{files:e.dataTransfer.files}});
 });
 
-const KEY='dalgona_v4';
-function loadEntries(){try{return JSON.parse(localStorage.getItem(KEY)||'[]');}catch(e){return[];}}
-function saveEntries(a){try{localStorage.setItem(KEY,JSON.stringify(a));}catch(e){}}
+// ── SUPABASE CONFIG ── replace with your own values
+const SUPABASE_URL = 'https://htknswnjbqsxpmlswxyt.supabase.co';
+const SUPABASE_ANON_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Imh0a25zd25qYnFzeHBtbHN3eHl0Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3NzUxMDQwMjAsImV4cCI6MjA5MDY4MDAyMH0.nMPvQ4E4LHCpk8LK8ApzIPuKuwuWgd_jcG27fpsK4pk';
+const sb = supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
 
-function submitEntry(){
+async function submitEntry(){
   const name=document.getElementById('inp-name').value.trim()||'Anonymous';
   const review=document.getElementById('inp-review').value.trim();
   if(!currentImg){showToast('📷 Please add a photo first!');return;}
-  const entry={id:Date.now(),name,success:successVal,stars:starVal,review,img:currentImg,ts:Date.now()};
-  const arr=loadEntries();arr.unshift(entry);saveEntries(arr);
-  showFreePopup();triggerConfetti();
-  document.getElementById('inp-name').value='';
-  document.getElementById('inp-review').value='';
-  document.getElementById('dz-inner').innerHTML='<div class="dz-placeholder"><div class="dz-icon">📷</div><p>Tap to choose a photo</p></div>';
-  document.getElementById('file-inp').value='';
-  currentImg=null;successVal=null;starVal=0;
-  document.querySelectorAll('.star').forEach(s=>s.classList.remove('lit'));
-  document.getElementById('btn-yes').className='stog-btn';
-  document.getElementById('btn-no').className='stog-btn';
-  setTimeout(()=>goPage('p4'),2200);
+  const btn=document.querySelector('.upload-card .crayon-btn.filled');
+  if(btn){btn.disabled=true;btn.textContent='Uploading…';}
+  try{
+    const {error}=await sb.from('dalgona_entries').insert([{name,review,stars:starVal,img:currentImg}]);
+    if(error) throw error;
+    showFreePopup();triggerConfetti();setTimeout(()=>goPage('p4'),2200);
+    document.getElementById('inp-name').value='';
+    document.getElementById('inp-review').value='';
+    document.getElementById('dz-inner').innerHTML='<div class="dz-placeholder"><div class="dz-icon">📷</div><p>Tap to choose a photo</p></div>';
+    document.getElementById('file-inp').value='';
+    currentImg=null;starVal=0;
+    document.querySelectorAll('.star').forEach(s=>s.classList.remove('lit'));
+  }catch(err){
+    showToast('Upload failed. Try again.');console.error(err);
+  }finally{
+    if(btn){btn.disabled=false;btn.textContent='UPLOAD IMAGE';}
+  }
 }
 
 function showFreePopup(){
@@ -400,43 +441,114 @@ function showFreePopup(){
 }
 
 function esc(s){return String(s).replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;');}
-function renderGallery(){
-  const arr=loadEntries();
+async function renderGallery(){
   const grid=document.getElementById('gallery-grid');
-  if(!arr.length){grid.innerHTML='<div class="empty-gallery"><div class="ei">🍬</div><p>Be the first to upload!</p></div>';return;}
-  grid.innerHTML=arr.map((e,i)=>{
-    const stars='⭐'.repeat(e.stars||0);
-    const newB=i===0?'<span class="badge badge-new">NEW</span>':'';
-    const sucB=e.success===true?'<span class="badge badge-win">WIN</span>':e.success===false?'<span class="badge badge-fail">FAIL</span>':'';
-    return `<div class="g-card">
-      <img src="${e.img}" alt="${esc(e.name)}" loading="lazy"/>
-      <div class="g-card-info">
-        <div class="g-card-name">${esc(e.name)}${newB}${sucB}</div>
-        ${stars?`<div class="g-card-stars">${stars}</div>`:''}
-        ${e.review?`<div class="g-review">"${esc(e.review)}"</div>`:''}
-      </div>
-    </div>`;
-  }).join('');
+  grid.innerHTML='<div class="empty-gallery"><div class="ei" style="font-size:24px;">⏳</div><p>Loading…</p></div>';
+  try{
+    const {data,error}=await sb.from('dalgona_entries').select('*').order('created_at',{ascending:false});
+    if(error) throw error;
+    if(!data||!data.length){
+      grid.innerHTML='<div class="empty-gallery"><div class="ei">🍬</div><p>Be the first to upload!</p></div>';
+      return;
+    }
+    grid.innerHTML=data.map((e)=>{
+      const t=new Date(e.created_at);
+      const mo=t.toLocaleString('en-US',{month:'short'});
+      const day=t.getDate();
+      const hr=t.getHours()%12||12;
+      const mn=String(t.getMinutes()).padStart(2,'0');
+      const ampm=t.getHours()>=12?'PM':'AM';
+      const timeStr=mo+' '+day+' · '+hr+':'+mn+' '+ampm;
+      const name=(e.name||'Anonymous').replace(/"/g,'&quot;');
+      return `<div class="g-card" onclick="openLightbox(this)">
+        <img src="${e.img}" alt="dalgona" loading="lazy"
+          data-name="${name}"
+          data-time="${timeStr}"/>
+      </div>`;
+    }).join('');
+  } catch(err){
+    grid.innerHTML='<div class="empty-gallery"><div class="ei">⚠️</div><p>Could not load gallery</p></div>';
+    console.error(err);
+  }
 }
 
 function triggerConfetti(){
   const cvs=document.getElementById('conf');const ctx=cvs.getContext('2d');
   cvs.width=innerWidth;cvs.height=innerHeight;
-  const cols=['#f5c518','#e8960a','#2e7d32','#c62828','#1565c0','#fff8e7'];
-  const pts=Array.from({length:90},()=>({x:Math.random()*cvs.width,y:-8,r:Math.random()*6+3,c:cols[Math.floor(Math.random()*cols.length)],ta:0,ts:Math.random()*.08+.04,vx:Math.random()*2-1}));
+  const cols=['#f5c518','#e8960a','#2e7d32','#c62828','#1565c0','#fff8e7','#ff4d8f','#00c9b1'];
+  // Burst from center of screen in all directions
+  const cx=cvs.width/2, cy=cvs.height/2;
+  const pts=Array.from({length:140},()=>{
+    const angle=Math.random()*Math.PI*2;
+    const speed=Math.random()*12+4;
+    const shape=Math.floor(Math.random()*3); // 0=ellipse,1=rect,2=ribbon
+    return {
+      x:cx,y:cy,
+      vx:Math.cos(angle)*speed,
+      vy:Math.sin(angle)*speed,
+      r:Math.random()*6+3,
+      w:Math.random()*10+5,
+      h:Math.random()*5+2,
+      c:cols[Math.floor(Math.random()*cols.length)],
+      rot:Math.random()*Math.PI*2,
+      rotV:(Math.random()-.5)*.3,
+      gravity:.25,
+      drag:.98,
+      shape,
+      alpha:1
+    };
+  });
   let raf;
+  let frame=0;
   (function draw(){
+    frame++;
     ctx.clearRect(0,0,cvs.width,cvs.height);
-    pts.forEach(p=>{ctx.beginPath();ctx.fillStyle=p.c;ctx.ellipse(p.x,p.y,p.r,p.r*.4,Math.sin(p.ta)*12,0,Math.PI*2);ctx.fill();p.y+=3;p.ta+=p.ts;p.x+=p.vx+Math.sin(p.ta)*1.2;});
-    if(pts.some(p=>p.y<cvs.height))raf=requestAnimationFrame(draw);
+    let alive=false;
+    pts.forEach(p=>{
+      p.vx*=p.drag; p.vy*=p.drag;
+      p.vy+=p.gravity;
+      p.x+=p.vx; p.y+=p.vy;
+      p.rot+=p.rotV;
+      if(frame>80) p.alpha=Math.max(0,p.alpha-.018);
+      ctx.save();
+      ctx.globalAlpha=p.alpha;
+      ctx.translate(p.x,p.y);
+      ctx.rotate(p.rot);
+      ctx.fillStyle=p.c;
+      ctx.beginPath();
+      if(p.shape===0){
+        ctx.ellipse(0,0,p.w/2,p.h/2,0,0,Math.PI*2);
+      } else if(p.shape===1){
+        ctx.rect(-p.w/2,-p.h/2,p.w,p.h);
+      } else {
+        ctx.moveTo(-p.w/2,0);ctx.lineTo(0,-p.h);ctx.lineTo(p.w/2,0);ctx.lineTo(0,p.h);ctx.closePath();
+      }
+      ctx.fill();
+      ctx.restore();
+      if(p.alpha>0&&p.y<cvs.height+20) alive=true;
+    });
+    if(alive&&frame<300) raf=requestAnimationFrame(draw);
     else ctx.clearRect(0,0,cvs.width,cvs.height);
   })();
-  setTimeout(()=>{cancelAnimationFrame(raf);ctx.clearRect(0,0,cvs.width,cvs.height);},4000);
+  setTimeout(()=>{cancelAnimationFrame(raf);ctx.clearRect(0,0,cvs.width,cvs.height);},6000);
 }
 
 function showToast(msg){
   const t=document.getElementById('toast');t.textContent=msg;t.classList.add('show');
   setTimeout(()=>t.classList.remove('show'),2800);
+}
+
+function openLightbox(card){
+  const img=card.querySelector('img');
+  document.getElementById('lightbox-img').src=img.src;
+  document.getElementById('lightbox-name').textContent=img.dataset.name||'';
+  document.getElementById('lightbox-time').textContent=img.dataset.time||'';
+  document.getElementById('lightbox').classList.add('open');
+}
+function closeLightbox(e){
+  if(e) e.stopPropagation();
+  document.getElementById('lightbox').classList.remove('open');
+  document.getElementById('lightbox-img').src='';
 }
 </script>
 
@@ -456,6 +568,29 @@ function onYouTubeIframeAPIReady(){
     events:{onReady:function(e){e.target.setVolume(40);e.target.playVideo();}}
   });
 }
+
+function openLightbox(card){
+  const img=card.querySelector('img');
+  document.getElementById('lightbox-img').src=img.src;
+  document.getElementById('lightbox-name').textContent=img.dataset.name||'';
+  document.getElementById('lightbox-time').textContent=img.dataset.time||'';
+  document.getElementById('lightbox').classList.add('open');
+}
+function closeLightbox(e){
+  if(e) e.stopPropagation();
+  document.getElementById('lightbox').classList.remove('open');
+  document.getElementById('lightbox-img').src='';
+}
 </script>
+
+<!-- LIGHTBOX -->
+<div id="lightbox" onclick="closeLightbox()">
+  <button id="lightbox-close" onclick="closeLightbox(event)">✕</button>
+  <img id="lightbox-img" src="" alt=""/>
+  <div id="lightbox-info">
+    <div id="lightbox-name"></div>
+    <div id="lightbox-time"></div>
+  </div>
+</div>
 </body>
 </html>
