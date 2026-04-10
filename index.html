@@ -123,15 +123,15 @@ textarea.field-input{font-family:Arial,sans-serif!important;resize:none;height:5
 .dz-preview{max-height:90px;max-width:100%;border-radius:4px;display:block;margin:0 auto;}
 
 /* PAGE 4 */
-#p4 .page-inner{padding-top:1.6rem;}
+#p4{overflow-y:auto;}
+#p4 .page-inner{padding-top:1.6rem;height:auto;min-height:100%;}
 .gallery-title{font-family:'Teko',sans-serif;font-size:clamp(34px,11vw,54px);font-weight:700;color:var(--brown);margin-bottom:.7rem;text-align:center;}
 .gallery-grid{
-  width:100%;max-width:360px;display:grid;grid-template-columns:1fr 1fr 1fr;gap:4px;
-  overflow-y:auto;flex:1;padding-bottom:.5rem;scrollbar-width:none;
-  
+  width:100%;max-width:360px;display:grid;grid-template-columns:1fr 1fr 1fr;column-gap:4px;row-gap:4px;
+  padding-bottom:1.5rem;
 }
-.gallery-grid::-webkit-scrollbar{display:none;}
-.g-card{border:none;border-radius:8px;overflow:hidden;background:rgba(255,253,245,.35);animation:card-pop .35s cubic-bezier(.22,1,.36,1);}
+.g-card{border:none;border-radius:8px;overflow:hidden;background:rgba(255,253,245,.35);aspect-ratio:1;animation:card-pop .35s cubic-bezier(.22,1,.36,1);}
+.g-card-spacer{visibility:hidden;aspect-ratio:1;}
 @keyframes card-pop{from{opacity:0;transform:scale(.9);}to{opacity:1;transform:scale(1);}}
 .g-card img{width:100%;aspect-ratio:1;object-fit:cover;display:block;border-radius:6px;}
 .g-card-info{padding:.3rem .4rem;}
@@ -205,9 +205,14 @@ textarea.field-input{font-family:Arial,sans-serif!important;resize:none;height:5
   font-family:'Teko',sans-serif;font-size:22px;font-weight:500;
   color:#333;letter-spacing:1px;
 }
+#lightbox-stars{font-size:18px;margin-top:.3rem;line-height:1;}
+#lightbox-review{
+  font-family:'Roboto',sans-serif;font-size:14px;
+  color:rgba(0,0,0,.6);margin-top:.4rem;font-style:italic;
+}
 #lightbox-time{
   font-family:'Roboto',sans-serif;font-size:12px;
-  color:rgba(0,0,0,.4);margin-top:.2rem;
+  color:rgba(0,0,0,.4);margin-top:.4rem;
 }
 #lightbox-close{
   position:absolute;top:1rem;right:1.2rem;
@@ -451,7 +456,7 @@ async function renderGallery(){
       grid.innerHTML='<div class="empty-gallery"><div class="ei">🍬</div><p>Be the first to upload!</p></div>';
       return;
     }
-    grid.innerHTML=data.map((e)=>{
+    const cards=data.map((e)=>{
       const t=new Date(e.created_at);
       const mo=t.toLocaleString('en-US',{month:'short'});
       const day=t.getDate();
@@ -460,12 +465,19 @@ async function renderGallery(){
       const ampm=t.getHours()>=12?'PM':'AM';
       const timeStr=mo+' '+day+' · '+hr+':'+mn+' '+ampm;
       const name=(e.name||'Anonymous').replace(/"/g,'&quot;');
+      const review=(e.review||'').replace(/"/g,'&quot;');
+      const stars=e.stars||0;
       return `<div class="g-card" onclick="openLightbox(this)">
         <img src="${e.img}" alt="dalgona" loading="lazy"
           data-name="${name}"
-          data-time="${timeStr}"/>
+          data-time="${timeStr}"
+          data-stars="${stars}"
+          data-review="${review}"/>
       </div>`;
-    }).join('');
+    });
+    const rem=data.length%3;
+    if(rem>0) for(let i=0;i<3-rem;i++) cards.push('<div class="g-card-spacer"></div>');
+    grid.innerHTML=cards.join('');
   } catch(err){
     grid.innerHTML='<div class="empty-gallery"><div class="ei">⚠️</div><p>Could not load gallery</p></div>';
     console.error(err);
@@ -543,6 +555,9 @@ function openLightbox(card){
   document.getElementById('lightbox-img').src=img.src;
   document.getElementById('lightbox-name').textContent=img.dataset.name||'';
   document.getElementById('lightbox-time').textContent=img.dataset.time||'';
+  const stars=parseInt(img.dataset.stars)||0;
+  document.getElementById('lightbox-stars').textContent=stars?'⭐'.repeat(stars):'';
+  document.getElementById('lightbox-review').textContent=img.dataset.review||'';
   document.getElementById('lightbox').classList.add('open');
 }
 function closeLightbox(e){
@@ -581,6 +596,9 @@ function openLightbox(card){
   document.getElementById('lightbox-img').src=img.src;
   document.getElementById('lightbox-name').textContent=img.dataset.name||'';
   document.getElementById('lightbox-time').textContent=img.dataset.time||'';
+  const stars=parseInt(img.dataset.stars)||0;
+  document.getElementById('lightbox-stars').textContent=stars?'⭐'.repeat(stars):'';
+  document.getElementById('lightbox-review').textContent=img.dataset.review||'';
   document.getElementById('lightbox').classList.add('open');
 }
 function closeLightbox(e){
@@ -596,6 +614,8 @@ function closeLightbox(e){
   <img id="lightbox-img" src="" alt=""/>
   <div id="lightbox-info">
     <div id="lightbox-name"></div>
+    <div id="lightbox-stars"></div>
+    <div id="lightbox-review"></div>
     <div id="lightbox-time"></div>
   </div>
 </div>
