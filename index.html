@@ -442,7 +442,7 @@ function showFreePopup(){
   setTimeout(()=>{
     p.classList.remove('show');p.classList.add('hide');
     setTimeout(()=>{p.classList.remove('hide');p.style.pointerEvents='none';},500);
-  },2000);
+  },5000);
 }
 
 function esc(s){return String(s).replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;');}
