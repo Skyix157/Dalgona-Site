@@ -214,6 +214,13 @@ textarea.field-input{font-family:Arial,sans-serif!important;resize:none;height:5
   font-family:'Roboto',sans-serif;font-size:12px;
   color:rgba(0,0,0,.4);margin-top:.4rem;
 }
+#lightbox-delete{
+  margin-top:1.1rem;padding:.45rem 1.4rem;
+  font-family:'Teko',sans-serif;font-size:16px;font-weight:600;letter-spacing:.5px;
+  color:#fff;background:#c62828;border:none;border-radius:8px;cursor:pointer;
+  display:none;
+}
+#lightbox-delete:active{opacity:.8;}
 #lightbox-close{
   position:absolute;top:1rem;right:1.2rem;
   font-size:28px;color:rgba(0,0,0,.5);cursor:pointer;
@@ -419,9 +426,12 @@ async function submitEntry(){
   const btn=document.querySelector('.upload-card .crayon-btn.filled');
   if(btn){btn.disabled=true;btn.textContent='Uploading…';}
   try{
-    const {error}=await sb.from('dalgona_entries').insert([{name,review,stars:starVal,img:currentImg}]);
+    const {data:inserted,error}=await sb.from('dalgona_entries').insert([{name,review,stars:starVal,img:currentImg}]).select('id').single();
     if(error) throw error;
-    showFreePopup();triggerConfetti();setTimeout(()=>goPage('p4'),2200);
+    const owned=JSON.parse(localStorage.getItem('ownedEntries')||'[]');
+    owned.push(inserted.id);
+    localStorage.setItem('ownedEntries',JSON.stringify(owned));
+    showFreePopup();triggerConfetti();
     document.getElementById('inp-name').value='';
     document.getElementById('inp-review').value='';
     document.getElementById('dz-inner').innerHTML='<div class="dz-placeholder"><div class="dz-icon">📷</div><p>Tap to choose a photo</p></div>';
@@ -440,8 +450,8 @@ function showFreePopup(){
   p.style.pointerEvents='all';p.classList.add('show');
   setTimeout(()=>{
     p.classList.remove('show');p.classList.add('hide');
-    setTimeout(()=>{p.classList.remove('hide');p.style.pointerEvents='none';},500);
-  },5000);
+    setTimeout(()=>{p.classList.remove('hide');p.style.pointerEvents='none';goPage('p4');},500);
+  },7000);
 }
 
 function esc(s){return String(s).replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;');}
@@ -468,6 +478,7 @@ async function renderGallery(){
       const stars=e.stars||0;
       return `<div class="g-card" onclick="openLightbox(this)">
         <img src="${e.img}" alt="dalgona" loading="lazy"
+          data-id="${e.id}"
           data-name="${name}"
           data-time="${timeStr}"
           data-stars="${stars}"
@@ -551,13 +562,36 @@ function showToast(msg){
 
 function openLightbox(card){
   const img=card.querySelector('img');
+  const id=img.dataset.id||'';
   document.getElementById('lightbox-img').src=img.src;
   document.getElementById('lightbox-name').textContent=img.dataset.name||'';
   document.getElementById('lightbox-time').textContent=img.dataset.time||'';
   const stars=parseInt(img.dataset.stars)||0;
   document.getElementById('lightbox-stars').textContent=stars?'⭐'.repeat(stars):'';
   document.getElementById('lightbox-review').textContent=img.dataset.review||'';
+  const owned=JSON.parse(localStorage.getItem('ownedEntries')||'[]');
+  const delBtn=document.getElementById('lightbox-delete');
+  delBtn.style.display=owned.includes(id)?'block':'none';
+  delBtn.dataset.id=id;
   document.getElementById('lightbox').classList.add('open');
+}
+async function deleteEntry(e){
+  e.stopPropagation();
+  const id=document.getElementById('lightbox-delete').dataset.id;
+  if(!id) return;
+  const delBtn=document.getElementById('lightbox-delete');
+  delBtn.disabled=true;delBtn.textContent='Deleting…';
+  try{
+    const {error}=await sb.from('dalgona_entries').delete().eq('id',id);
+    if(error) throw error;
+    const owned=JSON.parse(localStorage.getItem('ownedEntries')||'[]');
+    localStorage.setItem('ownedEntries',JSON.stringify(owned.filter(x=>x!==id)));
+    closeLightbox();
+    renderGallery();
+  }catch(err){
+    showToast('Delete failed. Try again.');console.error(err);
+    delBtn.disabled=false;delBtn.textContent='DELETE MY PHOTO';
+  }
 }
 function closeLightbox(e){
   if(e) e.stopPropagation();
@@ -592,13 +626,36 @@ document.addEventListener('touchstart', unlockBgm, {once:true});
 
 function openLightbox(card){
   const img=card.querySelector('img');
+  const id=img.dataset.id||'';
   document.getElementById('lightbox-img').src=img.src;
   document.getElementById('lightbox-name').textContent=img.dataset.name||'';
   document.getElementById('lightbox-time').textContent=img.dataset.time||'';
   const stars=parseInt(img.dataset.stars)||0;
   document.getElementById('lightbox-stars').textContent=stars?'⭐'.repeat(stars):'';
   document.getElementById('lightbox-review').textContent=img.dataset.review||'';
+  const owned=JSON.parse(localStorage.getItem('ownedEntries')||'[]');
+  const delBtn=document.getElementById('lightbox-delete');
+  delBtn.style.display=owned.includes(id)?'block':'none';
+  delBtn.dataset.id=id;
   document.getElementById('lightbox').classList.add('open');
+}
+async function deleteEntry(e){
+  e.stopPropagation();
+  const id=document.getElementById('lightbox-delete').dataset.id;
+  if(!id) return;
+  const delBtn=document.getElementById('lightbox-delete');
+  delBtn.disabled=true;delBtn.textContent='Deleting…';
+  try{
+    const {error}=await sb.from('dalgona_entries').delete().eq('id',id);
+    if(error) throw error;
+    const owned=JSON.parse(localStorage.getItem('ownedEntries')||'[]');
+    localStorage.setItem('ownedEntries',JSON.stringify(owned.filter(x=>x!==id)));
+    closeLightbox();
+    renderGallery();
+  }catch(err){
+    showToast('Delete failed. Try again.');console.error(err);
+    delBtn.disabled=false;delBtn.textContent='DELETE MY PHOTO';
+  }
 }
 function closeLightbox(e){
   if(e) e.stopPropagation();
@@ -617,6 +674,7 @@ function closeLightbox(e){
     <div id="lightbox-review"></div>
     <div id="lightbox-time"></div>
   </div>
+  <button id="lightbox-delete" onclick="deleteEntry(event)">DELETE MY PHOTO</button>
 </div>
 </body>
 </html>
