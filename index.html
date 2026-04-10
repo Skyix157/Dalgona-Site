@@ -559,15 +559,22 @@ function closeLightbox(e){
 var tag = document.createElement('script');
 tag.src = "https://www.youtube.com/iframe_api";
 document.head.appendChild(tag);
-var bgmPlayer;
+var bgmPlayer, bgmUnlocked=false;
 function onYouTubeIframeAPIReady(){
   bgmPlayer = new YT.Player('yt-bgm',{
     height:'1',width:'1',
     videoId:'asQNnQmOVCE', // Squid Game OST - Way Back Then
-    playerVars:{autoplay:1,loop:1,playlist:'asQNnQmOVCE',mute:0,controls:0,disablekb:1,fs:0,modestbranding:1,playsinline:1},
-    events:{onReady:function(e){e.target.setVolume(40);e.target.playVideo();}}
+    playerVars:{autoplay:1,loop:1,playlist:'asQNnQmOVCE',mute:1,controls:0,disablekb:1,fs:0,modestbranding:1,playsinline:1},
+    events:{onReady:function(e){e.target.playVideo();}}
   });
 }
+function unlockBgm(){
+  if(bgmUnlocked) return;
+  bgmUnlocked=true;
+  if(bgmPlayer && bgmPlayer.unMute){bgmPlayer.unMute();bgmPlayer.setVolume(40);}
+}
+document.addEventListener('click', unlockBgm, {once:true});
+document.addEventListener('touchstart', unlockBgm, {once:true});
 
 function openLightbox(card){
   const img=card.querySelector('img');
